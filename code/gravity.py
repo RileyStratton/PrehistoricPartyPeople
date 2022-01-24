@@ -1,0 +1,2 @@
+class Gravity():
+    pass
