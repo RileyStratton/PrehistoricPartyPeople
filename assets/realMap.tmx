@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.5" tiledversion="1.7.2" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="32" tileheight="32" infinite="1" nextlayerid="2" nextobjectid="1">
+ <tileset firstgid="1" source="../../freetileset/png/Tiles/tiles.tsx"/>
+ <layer id="1" name="Tile Layer 1" width="100" height="100">
+  <data encoding="base64" compression="zlib">
+   <chunk x="0" y="-16" width="16" height="16">
+   eJxjYBgFo2AU0BMwDrD9LEhsAAS8AAY=
+  </chunk>
+   <chunk x="16" y="-16" width="16" height="16">
+   eJxjYBgFo2AUUAKYKOSDACsSJheQox8AEeAAIg==
+  </chunk>
+   <chunk x="-32" y="0" width="16" height="16">
+   eJxjYBg5gAkHmxj1wxWMBD8SA+gdDrS2D918XPYBAB2AABE=
+  </chunk>
+   <chunk x="-16" y="0" width="16" height="16">
+   eJxjYBgegIlC/igYBZQAJhxsaplJKzsAIcgAEw==
+  </chunk>
+   <chunk x="0" y="0" width="16" height="16">
+   eJxjYBgegAmNz0yEHhZaOGQIgaHu/6HufhhAT7v4+OhylAIAMEAAGg==
+  </chunk>
+   <chunk x="16" y="0" width="16" height="16">
+   eJxjYGBgYGWAAFYiMDaAS5xYMKp/VD85gB+HfkY0PhMBPrp+UvlDGQAAefsAkg==
+  </chunk>
+   <chunk x="32" y="0" width="16" height="16">
+   eJxjYBgFo4B4wDTQDhhAMBz9DgAJSAAF
+  </chunk>
+   <chunk x="0" y="16" width="16" height="16">
+   eJxjYBgFo4B0wDTQDhgFVAEAB5AAAw==
+  </chunk>
+   <chunk x="16" y="16" width="16" height="16">
+   eJxjYBgFIxEwUcgfBcMDAAATgAAJ
+  </chunk>
+   <chunk x="32" y="16" width="16" height="16">
+   eJxjYCAMmIhQQ01Ab/soBUPNvaNgFMAAABgIAAc=
+  </chunk>
+  </data>
+ </layer>
+</map>
