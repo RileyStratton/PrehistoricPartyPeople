@@ -2,6 +2,7 @@
 Platformer Game
 """
 import arcade
+import os
 
 # Constants
 SCREEN_WIDTH = 1000
@@ -9,11 +10,11 @@ SCREEN_HEIGHT = 650
 SCREEN_TITLE = "Platformer"
 
 # Constants used to scale our sprites from their original size
-CHARACTER_SCALING = 1
+CHARACTER_SCALING = 5
 TILE_SCALING = 0.5
 
 # Movement speed of player, in pixels per frame
-PLAYER_MOVEMENT_SPEED = 5
+PLAYER_MOVEMENT_SPEED = 8
 GRAVITY = 1
 PLAYER_JUMP_SPEED = 20
 
@@ -46,7 +47,7 @@ class MyGame(arcade.Window):
         self.scene = arcade.Scene()
 
         # Set up the player, specifically placing it at these coordinates.
-        image_source = ":resources:images/animated_characters/female_adventurer/femaleAdventurer_idle.png"
+        image_source = os.path.join('assets/player.png')
         self.player_sprite = arcade.Sprite(image_source, CHARACTER_SCALING)
         self.player_sprite.center_x = 64
         self.player_sprite.center_y = 128
