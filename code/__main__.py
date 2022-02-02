@@ -40,6 +40,11 @@ class MyGame(arcade.Window):
 
         arcade.set_background_color(arcade.csscolor.CORNFLOWER_BLUE)
 
+        # Load sound
+        self.background_music = arcade.load_sound("assets/sound/background/mp3/night-forest-with-insects.mp3")
+        # play the background music
+        arcade.play_sound(self.background_music, volume=0.25)
+
     def setup(self):
         """Set up the game here. Call this function to restart the game."""
 
