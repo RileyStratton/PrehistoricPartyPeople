@@ -1,0 +1,58 @@
+{
+    "dinos":[
+        {
+    "Name": "Triceratops",
+    "TimePeriod": "Cretaceous",
+    "Diet": "Herbivore",
+    "Location": "Western North America"
+        },
+        {
+    "Name": "Velociraptor",
+    "TimePeriod": "Cretaceous",
+    "Diet": "Carnivore",
+    "Location": "Central & East Asia"
+        },
+        {
+    "Name": "Stegosaurus",
+    "TimePeriod": "Jurassic",
+    "Diet": "Herbivore",
+    "Location": "Western US & Portual"
+        },
+        {
+    "Name": "Pterodactyl",
+    "TimePeriod": "Jurassic & Cretaceous",
+    "Diet": "Carnivore",
+    "Location": "Germany"
+        },
+        {
+    "Name": "T-rex",
+    "TimePeriod": "Cretaceous",
+    "Diet": "Carnivore",
+    "Location": "Northwest US"
+        },
+        {
+    "Name": "Brachiosaurus",
+    "TimePeriod": "Jurassic",
+    "Diet": "Herbivore",
+    "Location": "North America"
+        },
+        {
+    "Name": "Spinosaurus",
+    "TimePeriod": "Cretaceous",
+    "Diet": "Carnivore",
+    "Location": "North Africa"
+        },
+        {
+    "Name": "Giganotosaurus",
+    "TimePeriod": "Cretaceous",
+    "Diet": "Carnivore",
+    "Location": "Argentina"
+        },
+        {
+    "Name": "Parasaurolophus ",
+    "TimePeriod": "Cretaceous",
+    "Diet": "Herbivore",
+    "Location": "North America & Asia"
+        }
+    ]
+}
