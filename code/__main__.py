@@ -40,6 +40,9 @@ class MyGame(arcade.Window):
 
         arcade.set_background_color(arcade.csscolor.CORNFLOWER_BLUE)
 
+        # Our camera
+        self.camera = None
+
         # Load sound
         self.background_music = arcade.load_sound("assets/sound/background/mp3/night-forest-with-insects.mp3")
         # play the background music
@@ -47,6 +50,9 @@ class MyGame(arcade.Window):
 
     def setup(self):
         """Set up the game here. Call this function to restart the game."""
+        
+        # Initialize camera
+        self.camera = arcade.Camera(self.width, self.height)
 
         # Initialize Scene
         self.scene = arcade.Scene()
@@ -89,6 +95,9 @@ class MyGame(arcade.Window):
         # Clear the screen to the background color
         arcade.start_render()
 
+        # Use the camera
+        self.camera.use()
+
         # Draw our Scene
         self.scene.draw()
 
@@ -111,11 +120,30 @@ class MyGame(arcade.Window):
         elif key == arcade.key.RIGHT or key == arcade.key.D:
             self.player_sprite.change_x = 0
 
+    def center_camera_to_player(self):
+        screen_center_x = self.player_sprite.center_x - (self.camera.viewport_width / 2.5)
+        screen_center_y = self.player_sprite.center_y - (
+            self.camera.viewport_height / 2.5
+        )
+
+        # Don't let camera travel past 0
+        if screen_center_x < 0:
+            screen_center_x = 0
+        if screen_center_y < 0:
+            screen_center_y = 0
+        player_centered = screen_center_x, screen_center_y
+
+        self.camera.move_to(player_centered)
+
     def on_update(self, delta_time):
         """Movement and game logic"""
 
         # Move the player with the physics engine
         self.physics_engine.update()
+
+        # Center the camera on the player
+        # Position the camera
+        self.center_camera_to_player()
 
 
 def main():
