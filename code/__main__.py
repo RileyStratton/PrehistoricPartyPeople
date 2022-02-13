@@ -66,10 +66,10 @@ class MyGame(arcade.Window):
 
         for coordinate in coordinate_list:
             # Add a crate on the ground
-            box = arcade.Sprite(
+            wall = arcade.Sprite(
                 ":resources:images/tiles/boxCrate_double.png", TILE_SCALING
             )
-            box.position = coordinate
+            wall.position = coordinate
             self.scene.add_sprite("Walls", wall)
 
         # Create the 'physics engine'
