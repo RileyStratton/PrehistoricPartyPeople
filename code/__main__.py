@@ -66,16 +66,23 @@ class MyGame(arcade.Window):
 
         for coordinate in coordinate_list:
             # Add a crate on the ground
-            wall = arcade.Sprite(
+            box = arcade.Sprite(
                 ":resources:images/tiles/boxCrate_double.png", TILE_SCALING
             )
-            wall.position = coordinate
+            box.position = coordinate
             self.scene.add_sprite("Walls", wall)
 
         # Create the 'physics engine'
         self.physics_engine = arcade.PhysicsEnginePlatformer(
             self.player_sprite, gravity_constant=GRAVITY, walls=self.scene["Walls"]
         )
+
+        sign = arcade.Sprite(":resources:images/tiles/signRight.png")
+
+        sign.position = [512, 256]
+
+        self.scene.add_sprite("Sign", sign)
+
 
     def on_draw(self):
         """Render the screen."""
