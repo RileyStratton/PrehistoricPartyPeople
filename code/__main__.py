@@ -83,11 +83,11 @@ class MyGame(arcade.Window):
             self.player_sprite, gravity_constant=GRAVITY, walls=self.scene["Walls"]
         )
 
-        sign = arcade.Sprite(":resources:images/tiles/signRight.png")
+        sign = arcade.Sprite(":resources:images/tiles/signRight.png", TILE_SCALING)
 
-        sign.position = [512, 256]
+        sign.position = [512, 264]
 
-        self.scene.add_sprite("Sign", sign)
+        self.scene.add_sprite("Signs", sign)
 
 
     def on_draw(self):
