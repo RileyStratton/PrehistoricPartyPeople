@@ -2,6 +2,7 @@
 Platformer Game
 """
 import arcade
+import os
 
 # Constants
 SCREEN_WIDTH = 1000
@@ -9,11 +10,11 @@ SCREEN_HEIGHT = 650
 SCREEN_TITLE = "Platformer"
 
 # Constants used to scale our sprites from their original size
-CHARACTER_SCALING = 1
+CHARACTER_SCALING = 5
 TILE_SCALING = 0.5
 
 # Movement speed of player, in pixels per frame
-PLAYER_MOVEMENT_SPEED = 5
+PLAYER_MOVEMENT_SPEED = 8
 GRAVITY = 1
 PLAYER_JUMP_SPEED = 20
 
@@ -39,6 +40,11 @@ class MyGame(arcade.Window):
 
         arcade.set_background_color(arcade.csscolor.CORNFLOWER_BLUE)
 
+        # Load sound
+        self.background_music = arcade.load_sound("assets/sound/background/mp3/night-forest-with-insects.mp3")
+        # play the background music
+        arcade.play_sound(self.background_music, volume=0.25)
+
     def setup(self):
         """Set up the game here. Call this function to restart the game."""
 
@@ -46,7 +52,7 @@ class MyGame(arcade.Window):
         self.scene = arcade.Scene()
 
         # Set up the player, specifically placing it at these coordinates.
-        image_source = ":resources:images/animated_characters/female_adventurer/femaleAdventurer_idle.png"
+        image_source = os.path.join('assets/player_2.png')
         self.player_sprite = arcade.Sprite(image_source, CHARACTER_SCALING)
         self.player_sprite.center_x = 64
         self.player_sprite.center_y = 128
