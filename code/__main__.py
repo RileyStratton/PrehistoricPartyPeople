@@ -65,7 +65,7 @@ class MyGame(arcade.Window):
         # Set up the player, specifically placing it at these coordinates.
         image_source = os.path.join('assets/player_2.png')
         self.player_sprite = arcade.Sprite(image_source, CHARACTER_SCALING)
-        self.player_sprite.center_x = 64
+        self.player_sprite.center_x = SCREEN_WIDTH / 2
         self.player_sprite.center_y = 128
         self.scene.add_sprite("Player", self.player_sprite)
 
