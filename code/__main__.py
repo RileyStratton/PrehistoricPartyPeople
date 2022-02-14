@@ -40,10 +40,14 @@ class MyGame(arcade.Window):
 
         arcade.set_background_color(arcade.csscolor.CORNFLOWER_BLUE)
 
-        # Load sound
+        # Load background sound
         self.background_music = arcade.load_sound("assets/sound/background/mp3/night-forest-with-insects.mp3")
         # play the background music
         arcade.play_sound(self.background_music, volume=0.25)
+
+        # Load character movement sound
+        self.character_jump = arcade.load_sound("assets/sound/character_movement/jump_sound.wav")
+
 
     def setup(self):
         """Set up the game here. Call this function to restart the game."""
@@ -98,6 +102,7 @@ class MyGame(arcade.Window):
         if key == arcade.key.UP or key == arcade.key.W:
             if self.physics_engine.can_jump():
                 self.player_sprite.change_y = PLAYER_JUMP_SPEED
+                arcade.play_sound(self.character_jump)
         elif key == arcade.key.LEFT or key == arcade.key.A:
             self.player_sprite.change_x = -PLAYER_MOVEMENT_SPEED
         elif key == arcade.key.RIGHT or key == arcade.key.D:
