@@ -15,7 +15,7 @@ CHARACTER_SCALING = 5
 TILE_SCALING = 0.5
 
 # Movement speed of player, in pixels per frame
-PLAYER_MOVEMENT_SPEED = 8
+MAX_PLAYER_MOVEMENT_SPEED = 8
 GRAVITY = 1
 PLAYER_JUMP_SPEED = 20
 
@@ -29,6 +29,11 @@ class MyGame(arcade.Window):
 
         # Call the parent class and set up the window
         super().__init__(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
+        # Values for movement
+        self.left_pressed = False
+        self.right_pressed = False
+        self.move_right = False
+        self.move_left = False
 
         # Our Scene Object
         self.scene = None
@@ -41,6 +46,9 @@ class MyGame(arcade.Window):
 
         arcade.set_background_color(arcade.csscolor.CORNFLOWER_BLUE)
 
+        # Our camera
+        self.camera = None
+
         # Load sound
         self.background_music = arcade.load_sound("assets/sound/background/mp3/night-forest-with-insects.mp3")
         # play the background music
@@ -52,6 +60,9 @@ class MyGame(arcade.Window):
 
     def setup(self):
         """Set up the game here. Call this function to restart the game."""
+        
+        # Initialize camera
+        self.camera = arcade.Camera(self.width, self.height)
 
         # Initialize Scene
         self.scene = arcade.Scene()
@@ -103,6 +114,9 @@ class MyGame(arcade.Window):
         # Clear the screen to the background color
         arcade.start_render()
 
+        # Use the camera
+        self.camera.use()
+
         # Draw our Scene
         self.scene.draw()
 
@@ -116,23 +130,73 @@ class MyGame(arcade.Window):
             if self.physics_engine.can_jump():
                 self.player_sprite.change_y = PLAYER_JUMP_SPEED
         elif key == arcade.key.LEFT or key == arcade.key.A:
-            self.player_sprite.change_x = -PLAYER_MOVEMENT_SPEED
+            self.left_pressed = True
         elif key == arcade.key.RIGHT or key == arcade.key.D:
-            self.player_sprite.change_x = PLAYER_MOVEMENT_SPEED
+            self.right_pressed = True
+
+        self.process_keychange()
 
     def on_key_release(self, key, modifiers):
         """Called when the user releases a key."""
 
         if key == arcade.key.LEFT or key == arcade.key.A:
-            self.player_sprite.change_x = 0
+            self.left_pressed = False
         elif key == arcade.key.RIGHT or key == arcade.key.D:
-            self.player_sprite.change_x = 0
+            self.right_pressed = False
+
+        self.process_keychange()
+
+    def process_keychange(self):
+        if self.right_pressed and not self.left_pressed:
+            #self.player_sprite.change_x = PLAYER_MOVEMENT_SPEED
+            self.move_right = True
+        elif self.left_pressed and not self.right_pressed:
+            #self.player_sprite.change_x = -PLAYER_MOVEMENT_SPEED
+            self.move_left = True
+        #else:
+            #self.player_sprite.change_x = 0
+
+    def center_camera_to_player(self):
+        screen_center_x = self.player_sprite.center_x - (self.camera.viewport_width / 2.5)
+        screen_center_y = self.player_sprite.center_y - (
+            self.camera.viewport_height / 2.5
+        )
+
+        # Don't let camera travel past 0
+        if screen_center_x < 0:
+            screen_center_x = 0
+        if screen_center_y < 0:
+            screen_center_y = 0
+        player_centered = screen_center_x, screen_center_y
+
+        self.camera.move_to(player_centered)
 
     def on_update(self, delta_time):
         """Movement and game logic"""
-
+        # Acceleration/deceleration logic
+        if self.move_right == True and self.right_pressed == True:
+            if self.player_sprite.change_x < MAX_PLAYER_MOVEMENT_SPEED:
+                self.player_sprite.change_x += 1
+        elif self.move_right == True and self.right_pressed == False:
+            if self.player_sprite.change_x > 0:
+                self.player_sprite.change_x -= 0.5
+            else:
+                self.move_right = False
+        elif self.move_left == True and self.left_pressed == True:
+            if self.player_sprite.change_x > -MAX_PLAYER_MOVEMENT_SPEED:
+                self.player_sprite.change_x -= 1
+        elif self.move_left == True and self.left_pressed == False:
+            if self.player_sprite.change_x < 0:
+                self.player_sprite.change_x += 0.5
+            else:
+                self.move_left = False
         # Move the player with the physics engine
         self.physics_engine.update()
+        
+        # Center the camera on the player
+        # Position the camera
+        self.center_camera_to_player()
+
 
         # Collision Detection
         # player_collision_list = arcade.check_for_collision_with_lists(
@@ -167,8 +231,6 @@ class MyGame(arcade.Window):
 
     # def remove_sign(self):
     #     print(self.manager)
-
-        
 
 
 def main():
