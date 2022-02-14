@@ -46,6 +46,9 @@ class MyGame(arcade.Window):
 
         arcade.set_background_color(arcade.csscolor.CORNFLOWER_BLUE)
 
+        # Our camera
+        self.camera = None
+
         # Load background sound
         self.background_music = arcade.load_sound("assets/sound/background/mp3/night-forest-with-insects.mp3")
         # play the background music
@@ -54,6 +57,9 @@ class MyGame(arcade.Window):
         # Load character movement sound
         self.character_jump = arcade.load_sound("assets/sound/character_movement/jump_sound.wav")
 
+        # Enables a GUI Manager to make signs work
+        # self.manager = arcade.gui.UIManager(self)
+        # self.manager.enable()
 
     def setup(self):
         """Set up the game here. Call this function to restart the game."""
