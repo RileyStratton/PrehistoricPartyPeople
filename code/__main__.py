@@ -64,6 +64,11 @@ class MyGame(arcade.Window):
         # Initialize Scene
         self.scene = arcade.Scene()
 
+        # Create an example sign
+        sign = arcade.Sprite(":resources:images/tiles/signRight.png", TILE_SCALING)
+        sign.position = [512, 264]
+        self.scene.add_sprite("Signs", sign)
+
         # Set up the player, specifically placing it at these coordinates.
         image_source = os.path.join('assets/player_2.png')
         self.player_sprite = arcade.Sprite(image_source, CHARACTER_SCALING)
@@ -97,11 +102,6 @@ class MyGame(arcade.Window):
             gravity_constant=GRAVITY, 
             walls=self.scene["Walls"]
         )
-
-        # Create an example sign
-        sign = arcade.Sprite(":resources:images/tiles/signRight.png", TILE_SCALING)
-        sign.position = [512, 264]
-        self.scene.add_sprite("Signs", sign)
 
 
 
