@@ -2,6 +2,7 @@
 Platformer Game
 """
 import arcade
+# import arcade.gui
 import os
 
 # Constants
@@ -53,6 +54,10 @@ class MyGame(arcade.Window):
         # play the background music
         arcade.play_sound(self.background_music, volume=0.25)
 
+        # Enables a GUI Manager to make signs work
+        # self.manager = arcade.gui.UIManager(self)
+        # self.manager.enable()
+
     def setup(self):
         """Set up the game here. Call this function to restart the game."""
         
@@ -91,8 +96,17 @@ class MyGame(arcade.Window):
 
         # Create the 'physics engine'
         self.physics_engine = arcade.PhysicsEnginePlatformer(
-            self.player_sprite, gravity_constant=GRAVITY, walls=self.scene["Walls"]
+            self.player_sprite, 
+            gravity_constant=GRAVITY, 
+            walls=self.scene["Walls"]
         )
+
+        # Create an example sign
+        sign = arcade.Sprite(":resources:images/tiles/signRight.png", TILE_SCALING)
+        sign.position = [512, 264]
+        self.scene.add_sprite("Signs", sign)
+
+
 
     def on_draw(self):
         """Render the screen."""
@@ -105,6 +119,9 @@ class MyGame(arcade.Window):
 
         # Draw our Scene
         self.scene.draw()
+
+        # Sign display
+        # self.manager.draw()
 
     def on_key_press(self, key, modifiers):
         """Called whenever a key is pressed."""
@@ -175,10 +192,45 @@ class MyGame(arcade.Window):
                 self.move_left = False
         # Move the player with the physics engine
         self.physics_engine.update()
-
+        
         # Center the camera on the player
         # Position the camera
         self.center_camera_to_player()
+
+
+        # Collision Detection
+        # player_collision_list = arcade.check_for_collision_with_lists(
+        #     self.player_sprite,
+        #     [
+        #         self.scene["Signs"]
+        #     ])
+
+        # for collision in player_collision_list:
+        #     if self.scene["Signs"] in collision.sprite_lists:
+        #         self.display_sign()
+
+            # if self.scene["Signs"] not in collision.sprite_lists:
+            #     self.remove_sign()
+
+    # def display_sign(self):
+    #     self.message_box = arcade.gui.UIMessageBox(
+    #         width=300,
+    #         height=200,
+    #         message_text=(
+    #             "You should have a look on the new GUI features "
+    #             "coming up with arcade 2.6!"
+    #         )
+    #     )
+
+    #     if self.manager.get_widgets_at(0) == self.message_box:
+    #         print ("huzzah")
+    #     else:
+    #         self.manager.add(self.message_box)
+    #         print ("boo")
+    #         print(self.manager.get_widgets_at(0))
+
+    # def remove_sign(self):
+    #     print(self.manager)
 
 
 def main():
