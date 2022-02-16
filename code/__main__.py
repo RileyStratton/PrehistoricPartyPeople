@@ -54,9 +54,12 @@ class MyGame(arcade.Window):
         # play the background music
         arcade.play_sound(self.background_music, volume=0.25)
 
+        # Outdated code! 
         # Enables a GUI Manager to make signs work
         # self.manager = arcade.gui.UIManager(self)
         # self.manager.enable()
+
+        self.display_sign = False
 
     def setup(self):
         """Set up the game here. Call this function to restart the game."""
@@ -120,8 +123,17 @@ class MyGame(arcade.Window):
         # Draw our Scene
         self.scene.draw()
 
-        # Sign display
+        # Old Sign display
         # self.manager.draw()
+
+        if self.display_sign:
+            arcade.draw_text(
+                "Enter to Start | I for Instructions",
+                start_x=100,
+                start_y=220,
+                color=arcade.color.INDIGO,
+                font_size=40,
+            )
 
     def on_key_press(self, key, modifiers):
         """Called whenever a key is pressed."""
@@ -199,19 +211,21 @@ class MyGame(arcade.Window):
 
 
         # Collision Detection
-        # player_collision_list = arcade.check_for_collision_with_lists(
-        #     self.player_sprite,
-        #     [
-        #         self.scene["Signs"]
-        #     ])
+        player_collision_list = arcade.check_for_collision_with_lists(
+            self.player_sprite,
+            [
+                self.scene["Signs"]
+            ])
 
-        # for collision in player_collision_list:
-        #     if self.scene["Signs"] in collision.sprite_lists:
-        #         self.display_sign()
+        for collision in player_collision_list:
+            if self.scene["Signs"] in collision.sprite_lists:
+                self.display_sign = True
+                print ("sign")
 
-            # if self.scene["Signs"] not in collision.sprite_lists:
-            #     self.remove_sign()
+            else:
+                self.display_sign = False
 
+    # Archaic sign code
     # def display_sign(self):
     #     self.message_box = arcade.gui.UIMessageBox(
     #         width=300,
