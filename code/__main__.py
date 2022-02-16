@@ -35,6 +35,10 @@ class MyGame(arcade.Window):
         self.move_right = False
         self.move_left = False
 
+        # Our TileMap Object
+        self.tile_map = None
+
+
         # Our Scene Object
         self.scene = None
 
@@ -65,6 +69,36 @@ class MyGame(arcade.Window):
         
         # Initialize camera
         self.camera = arcade.Camera(self.width, self.height)
+
+
+
+
+
+
+
+
+
+
+ # Name of map file to load
+        map_name = "assets/sand_map.json"
+
+        # Layer specific options are defined based on Layer names in a dictionary
+        # Doing this will make the SpriteList for the platforms layer
+        # use spatial hashing for detection.
+        layer_options = {
+            "Platforms": {
+                "use_spatial_hash": True,
+            },
+        }
+
+        # Read in the tiled map
+        self.tile_map = arcade.load_tilemap(map_name, TILE_SCALING, layer_options)
+
+        # Initialize Scene with our TileMap, this will automatically add all layers
+        # from the map as SpriteLists in the scene in the proper order.
+        self.scene = arcade.Scene.from_tilemap(self.tile_map)
+
+
 
         # Initialize Scene
         self.scene = arcade.Scene()
