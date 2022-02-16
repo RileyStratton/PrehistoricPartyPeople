@@ -49,16 +49,15 @@ class MyGame(arcade.Window):
         # Our camera
         self.camera = None
 
-        # Load sound
+        # Load background sound
         self.background_music = arcade.load_sound("assets/sound/background/mp3/night-forest-with-insects.mp3")
         # play the background music
         arcade.play_sound(self.background_music, volume=0.25)
 
-        # Outdated code! 
-        # Enables a GUI Manager to make signs work
-        # self.manager = arcade.gui.UIManager(self)
-        # self.manager.enable()
-
+        # Load character movement sound
+        self.character_jump = arcade.load_sound("assets/sound/character_movement/jump_sound.wav")
+        
+        # Initializes with no sign being displayed
         self.display_sign = False
 
     def setup(self):
@@ -78,7 +77,7 @@ class MyGame(arcade.Window):
         # Set up the player, specifically placing it at these coordinates.
         image_source = os.path.join('assets/player_2.png')
         self.player_sprite = arcade.Sprite(image_source, CHARACTER_SCALING)
-        self.player_sprite.center_x = 64
+        self.player_sprite.center_x = SCREEN_WIDTH / 2
         self.player_sprite.center_y = 128
         self.scene.add_sprite("Player", self.player_sprite)
 
@@ -107,9 +106,7 @@ class MyGame(arcade.Window):
             self.player_sprite, 
             gravity_constant=GRAVITY, 
             walls=self.scene["Walls"]
-        )
-
-
+            )
 
 
     def on_draw(self):
@@ -141,6 +138,7 @@ class MyGame(arcade.Window):
         if key == arcade.key.UP or key == arcade.key.W or key == arcade.key.SPACE:
             if self.physics_engine.can_jump():
                 self.player_sprite.change_y = PLAYER_JUMP_SPEED
+                arcade.play_sound(self.character_jump)
         elif key == arcade.key.LEFT or key == arcade.key.A:
             self.left_pressed = True
         elif key == arcade.key.RIGHT or key == arcade.key.D:
