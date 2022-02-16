@@ -70,6 +70,11 @@ class MyGame(arcade.Window):
         # Initialize Scene
         self.scene = arcade.Scene()
 
+        # Create an example sign
+        sign = arcade.Sprite(":resources:images/tiles/signRight.png", TILE_SCALING)
+        sign.position = [512, 264]
+        self.scene.add_sprite("Signs", sign)
+
         # Set up the player, specifically placing it at these coordinates.
         image_source = os.path.join('assets/player_2.png')
         self.player_sprite = arcade.Sprite(image_source, CHARACTER_SCALING)
@@ -104,10 +109,6 @@ class MyGame(arcade.Window):
             walls=self.scene["Walls"]
         )
 
-        # Create an example sign
-        sign = arcade.Sprite(":resources:images/tiles/signRight.png", TILE_SCALING)
-        sign.position = [512, 264]
-        self.scene.add_sprite("Signs", sign)
 
 
 
@@ -123,22 +124,21 @@ class MyGame(arcade.Window):
         # Draw our Scene
         self.scene.draw()
 
-        # Old Sign display
-        # self.manager.draw()
-
+        # If colliding with a sign, display this text
         if self.display_sign:
             arcade.draw_text(
-                "Enter to Start | I for Instructions",
-                start_x=100,
-                start_y=220,
-                color=arcade.color.INDIGO,
-                font_size=40,
+                text = "Continue forward to see how dinosaurs went extinct!",
+                start_x=512,
+                start_y=392,
+                color=arcade.color.BLACK,
+                font_size=20,
+                anchor_x="center"
             )
 
     def on_key_press(self, key, modifiers):
         """Called whenever a key is pressed."""
 
-        if key == arcade.key.UP or key == arcade.key.W:
+        if key == arcade.key.UP or key == arcade.key.W or key == arcade.key.SPACE:
             if self.physics_engine.can_jump():
                 self.player_sprite.change_y = PLAYER_JUMP_SPEED
         elif key == arcade.key.LEFT or key == arcade.key.A:
@@ -210,41 +210,10 @@ class MyGame(arcade.Window):
         self.center_camera_to_player()
 
 
-        # Collision Detection
-        player_collision_list = arcade.check_for_collision_with_lists(
-            self.player_sprite,
-            [
-                self.scene["Signs"]
-            ])
-
-        for collision in player_collision_list:
-            if self.scene["Signs"] in collision.sprite_lists:
-                self.display_sign = True
-                print ("sign")
-
-            else:
-                self.display_sign = False
-
-    # Archaic sign code
-    # def display_sign(self):
-    #     self.message_box = arcade.gui.UIMessageBox(
-    #         width=300,
-    #         height=200,
-    #         message_text=(
-    #             "You should have a look on the new GUI features "
-    #             "coming up with arcade 2.6!"
-    #         )
-    #     )
-
-    #     if self.manager.get_widgets_at(0) == self.message_box:
-    #         print ("huzzah")
-    #     else:
-    #         self.manager.add(self.message_box)
-    #         print ("boo")
-    #         print(self.manager.get_widgets_at(0))
-
-    # def remove_sign(self):
-    #     print(self.manager)
+        # Sign Collision Detection
+        sign_collision = arcade.check_for_collision_with_list(self.player_sprite, self.scene["Signs"])
+        if sign_collision: self.display_sign = True
+        else: self.display_sign = False
 
 
 def main():
