@@ -252,7 +252,9 @@ class MyGame(arcade.Window):
         collision_list = arcade.check_for_collision_with_lists(self.player_sprite, [self.scene["Signs"]])
         for collision in collision_list:
             if self.scene["Signs"] in collision.sprite_lists: self.display_sign = True
-            else: self.display_sign = False
+        
+        if not collision_list:
+            self.display_sign = False
 
 def main():
     """Main function"""
