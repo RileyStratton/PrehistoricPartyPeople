@@ -69,6 +69,9 @@ class MyGame(arcade.Window):
 
         arcade.set_background_color(arcade.csscolor.CORNFLOWER_BLUE)
 
+        # Initializes with no sign being displayed
+        self.display_sign = False
+
     def setup(self):
         """Set up the game here. Call this function to restart the game."""
 
@@ -78,6 +81,7 @@ class MyGame(arcade.Window):
 
         # Name of map file to load
         map_name = "./assets/sand_map.json"
+
 
         # Layer specific options are defined based on Layer names in a dictionary
         # Doing this will make the SpriteList for the platforms layer
@@ -94,6 +98,12 @@ class MyGame(arcade.Window):
         # Initialize Scene with our TileMap, this will automatically add all layers
         # from the map as SpriteLists in the scene in the proper order.
         self.scene = arcade.Scene.from_tilemap(self.tile_map)
+
+        # Create an example sign
+        # TODO: Comment this out once the map is done
+        sign = arcade.Sprite(":resources:images/tiles/signRight.png", TILE_SCALING)
+        sign.position = [400, 300]
+        self.scene.add_sprite("Signs", sign)
 
         # Keep track of the score
         self.score = 0
@@ -139,6 +149,17 @@ class MyGame(arcade.Window):
             arcade.csscolor.WHITE,
             18,
         )
+
+        # If colliding with a sign, display this text
+        if self.display_sign:
+            arcade.draw_text(
+                text = "Continue forward to see how dinosaurs went extinct!",
+                start_x=512,
+                start_y=392,
+                color=arcade.color.BLACK,
+                font_size=20,
+                anchor_x="center"
+            )
 
     def on_key_press(self, key, modifiers):
         """Called whenever a key is pressed."""
@@ -226,6 +247,13 @@ class MyGame(arcade.Window):
         self.center_camera_to_player()
 
 
+        # Sign Collision Detection
+        # TODO: Add collision with each different type 
+        collision_list = arcade.check_for_collision_with_lists(self.player_sprite, [self.scene["Signs"]])
+        for collision in collision_list:
+            if self.scene["Signs"] in collision.sprite_lists: self.display_sign = True
+            else: self.display_sign = False
+
 def main():
     """Main function"""
     window = MyGame()
@@ -235,6 +263,19 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 # """
@@ -309,16 +350,7 @@ if __name__ == "__main__":
 #         # Initialize camera
 #         self.camera = arcade.Camera(self.width, self.height)
 
-
-
-
-
-
-
-
-
-
-#  # Name of map file to load
+#         # Name of map file to load
 #         map_name = "assets/sand_map.json"
 
 #         # Layer specific options are defined based on Layer names in a dictionary
