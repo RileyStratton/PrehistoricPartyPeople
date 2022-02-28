@@ -52,9 +52,14 @@ class MyGame(arcade.Window):
         # Keep track of the score
         self.score = 0
 
-        # Load sounds
-        self.collect_coin_sound = arcade.load_sound(":resources:sounds/coin1.wav")
-        self.jump_sound = arcade.load_sound(":resources:sounds/jump1.wav")
+        # Load background sound
+        self.background_music = arcade.load_sound("assets/sound/background/mp3/night-forest-with-insects.mp3")
+        # play the background music
+        arcade.play_sound(self.background_music, volume=0.25)
+
+        # Load character sounds
+        # self.collect_coin_sound = arcade.load_sound(":resources:sounds/coin1.wav")
+        self.jump_sound = arcade.load_sound("assets/sound/character_movement/jump_sound.wav")
 
         arcade.set_background_color(arcade.csscolor.CORNFLOWER_BLUE)
 
