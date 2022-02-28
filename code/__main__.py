@@ -59,6 +59,8 @@ class MyGame(arcade.Window):
 
         # Load character sounds
         # self.collect_coin_sound = arcade.load_sound(":resources:sounds/coin1.wav")
+        # self.walk_sound = arcade.load_sound("assets/sound/character_movement/walk_1.wav")
+        self.walk_sound = arcade.load_sound("assets/sound/character_movement/walk_2.wav")
         self.jump_sound = arcade.load_sound("assets/sound/character_movement/jump_sound.wav")
 
         # Movement values
