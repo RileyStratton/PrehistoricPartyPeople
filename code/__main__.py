@@ -61,6 +61,12 @@ class MyGame(arcade.Window):
         # self.collect_coin_sound = arcade.load_sound(":resources:sounds/coin1.wav")
         self.jump_sound = arcade.load_sound("assets/sound/character_movement/jump_sound.wav")
 
+        # Movement values
+        self.left_pressed = False
+        self.right_pressed = False
+        self.move_right = False
+        self.move_left = False
+
         arcade.set_background_color(arcade.csscolor.CORNFLOWER_BLUE)
 
     def setup(self):
@@ -142,17 +148,29 @@ class MyGame(arcade.Window):
                 self.player_sprite.change_y = PLAYER_JUMP_SPEED
                 arcade.play_sound(self.jump_sound)
         elif key == arcade.key.LEFT or key == arcade.key.A:
-            self.player_sprite.change_x = -PLAYER_MOVEMENT_SPEED
+            self.left_pressed = True
         elif key == arcade.key.RIGHT or key == arcade.key.D:
-            self.player_sprite.change_x = PLAYER_MOVEMENT_SPEED
+            self.right_pressed = True
+
+        self.process_keychange()
 
     def on_key_release(self, key, modifiers):
         """Called when the user releases a key."""
 
         if key == arcade.key.LEFT or key == arcade.key.A:
-            self.player_sprite.change_x = 0
+            self.left_pressed = False
         elif key == arcade.key.RIGHT or key == arcade.key.D:
-            self.player_sprite.change_x = 0
+            self.right_pressed = False
+        
+        self.process_keychange()
+
+    def process_keychange(self):
+         if self.right_pressed and not self.left_pressed:
+             self.move_right = True
+         elif self.left_pressed and not self.right_pressed:
+             self.move_left = True
+         else:
+             self.player_sprite.change_x = 0
 
     def center_camera_to_player(self):
         screen_center_x = self.player_sprite.center_x - (self.camera.viewport_width / 2)
@@ -169,6 +187,23 @@ class MyGame(arcade.Window):
 
     def on_update(self, delta_time):
         """Movement and game logic"""
+        # Acceleration/deceleration logic
+        if self.move_right == True and self.right_pressed == True:
+             if self.player_sprite.change_x < PLAYER_MOVEMENT_SPEED:
+                 self.player_sprite.change_x += 1
+        elif self.move_right == True and self.right_pressed == False:
+             if self.player_sprite.change_x > 0:
+                 self.player_sprite.change_x -= 0.5
+             else:
+                 self.move_right = False
+        elif self.move_left == True and self.left_pressed == True:
+             if self.player_sprite.change_x > -PLAYER_MOVEMENT_SPEED:
+                 self.player_sprite.change_x -= 1
+        elif self.move_left == True and self.left_pressed == False:
+             if self.player_sprite.change_x < 0:
+                 self.player_sprite.change_x += 0.5
+             else:
+                 self.move_left = False
 
         # Move the player with the physics engine
         self.physics_engine.update()
