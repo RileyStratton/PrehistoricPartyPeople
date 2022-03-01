@@ -2,6 +2,7 @@
 Platformer Game
 """
 import arcade
+import os
 
 # Constants
 SCREEN_WIDTH = 1000
@@ -9,16 +10,128 @@ SCREEN_HEIGHT = 650
 SCREEN_TITLE = "Platformer"
 
 # Constants used to scale our sprites from their original size
-CHARACTER_SCALING = 1
+CHARACTER_SCALING = 4
 TILE_SCALING = 0.5
 COIN_SCALING = 0.5
 SPRITE_PIXEL_SIZE = 128
 GRID_PIXEL_SIZE = SPRITE_PIXEL_SIZE * TILE_SCALING
 
+
+# Constants used to track if the player is facing left or right
+RIGHT_FACING = 0
+LEFT_FACING = 1
+
+
 # Movement speed of player, in pixels per frame
+UPDATES_PER_FRAME = 10
 PLAYER_MOVEMENT_SPEED = 10
 GRAVITY = 1
 PLAYER_JUMP_SPEED = 20
+
+LAYER_NAME_PLAYER = "Player"
+
+
+
+
+
+def load_texture_pair(filename):
+    """
+    Load a texture pair, with the second being a mirror image.
+    """
+    return [
+        arcade.load_texture(filename),
+        arcade.load_texture(filename, flipped_horizontally=True),
+
+    ]
+class PlayerCharacter(arcade.Sprite):
+    """Player Sprite"""
+
+    def __init__(self):
+
+        # Set up parent class
+        super().__init__()
+
+        # Default to face-right
+        self.character_face_direction = RIGHT_FACING
+
+        # Used for flipping between image sequences
+        self.cur_texture = 0
+        self.scale = CHARACTER_SCALING
+
+        # Track our state
+        self.jumping = False
+        
+
+        # --- Load Textures ---
+
+        
+        main_path = os.path.join("./assets/player")
+
+        # Load textures for idle standing
+        self.idle_texture_pair = load_texture_pair(f"{main_path}/player_0.png")
+        self.jump_texture_pair = load_texture_pair(f"{main_path}/jump_0.png")
+        self.fall_texture_pair = load_texture_pair(f"{main_path}/fall_0.png")
+        
+
+     
+        
+
+        # Load textures for walking
+        self.walk_textures = []
+        for i in range(7):
+            texture = load_texture_pair(f"{main_path}/player_{i}.png")
+            self.walk_textures.append(texture)
+
+
+
+        # Set the initial texture
+        self.texture = self.idle_texture_pair[0]
+
+        # Hit box will be set based on the first image used
+        self.hit_box = self.texture.hit_box_points
+
+    def update_animation(self, key, delta_time: float= 1 / 60):
+    
+        # Figure out if we need to flip face left or right
+        if self.change_x < 0 and self.character_face_direction == RIGHT_FACING:
+            self.character_face_direction = LEFT_FACING
+        elif self.change_x > 0 and self.character_face_direction == LEFT_FACING:
+            self.character_face_direction = RIGHT_FACING
+
+
+        
+        if self.change_y > 0:
+            self.texture = self.jump_texture_pair[self.character_face_direction]
+            return
+        elif self.change_y < 0:
+            self.texture = self.fall_texture_pair[self.character_face_direction]
+            return
+        
+
+
+
+        
+
+
+        # Idle animation
+        if self.change_x == 0:
+            self.texture = self.idle_texture_pair[self.character_face_direction]
+            return
+
+        # Walking animation
+        self.cur_texture += 1
+        if self.cur_texture > 6  * UPDATES_PER_FRAME:
+            self.cur_texture = 0
+        frame = self.cur_texture // UPDATES_PER_FRAME
+        self.texture = self.walk_textures[frame][
+            self.character_face_direction
+        ]
+
+
+        
+
+
+        
 
 
 class MyGame(arcade.Window):
@@ -52,27 +165,11 @@ class MyGame(arcade.Window):
         # Keep track of the score
         self.score = 0
 
-        # Load background sound
-        self.background_music = arcade.load_sound("assets/sound/background/mp3/night-forest-with-insects.mp3")
-        # play the background music
-        arcade.play_sound(self.background_music, volume=0.25)
-
-        # Load character sounds
-        # self.collect_coin_sound = arcade.load_sound(":resources:sounds/coin1.wav")
-        # self.walk_sound = arcade.load_sound("assets/sound/character_movement/walk_1.wav")
-        self.walk_sound = arcade.load_sound("assets/sound/character_movement/walk_2.wav")
-        self.jump_sound = arcade.load_sound("assets/sound/character_movement/jump_sound.wav")
-
-        # Movement values
-        self.left_pressed = False
-        self.right_pressed = False
-        self.move_right = False
-        self.move_left = False
+        # Load sounds
+        self.collect_coin_sound = arcade.load_sound(":resources:sounds/coin1.wav")
+        self.jump_sound = arcade.load_sound(":resources:sounds/jump1.wav")
 
         arcade.set_background_color(arcade.csscolor.CORNFLOWER_BLUE)
-
-        # Initializes with no sign being displayed
-        self.display_sign = False
 
     def setup(self):
         """Set up the game here. Call this function to restart the game."""
@@ -83,7 +180,6 @@ class MyGame(arcade.Window):
 
         # Name of map file to load
         map_name = "./assets/sand_map.json"
-
 
         # Layer specific options are defined based on Layer names in a dictionary
         # Doing this will make the SpriteList for the platforms layer
@@ -101,21 +197,23 @@ class MyGame(arcade.Window):
         # from the map as SpriteLists in the scene in the proper order.
         self.scene = arcade.Scene.from_tilemap(self.tile_map)
 
-        # Create an example sign
-        # TODO: Comment this out once the map is done
-        sign = arcade.Sprite(":resources:images/tiles/signRight.png", TILE_SCALING)
-        sign.position = [400, 300]
-        self.scene.add_sprite("Signs", sign)
 
-        # Keep track of the score
-        self.score = 0
 
+        
+     
         # Set up the player, specifically placing it at these coordinates.
-        image_source = ":resources:images/animated_characters/female_adventurer/femaleAdventurer_idle.png"
-        self.player_sprite = arcade.Sprite(image_source, CHARACTER_SCALING)
+        self.player_sprite = PlayerCharacter()
+    
         self.player_sprite.center_x = 128
         self.player_sprite.center_y = 128
-        self.scene.add_sprite("Player", self.player_sprite)
+        self.scene.add_sprite(LAYER_NAME_PLAYER, self.player_sprite)
+
+        
+
+
+
+
+
 
         # --- Other stuff
         # Set the background color
@@ -152,48 +250,25 @@ class MyGame(arcade.Window):
             18,
         )
 
-        # If colliding with a sign, display this text
-        if self.display_sign:
-            arcade.draw_text(
-                text = "Continue forward to see how dinosaurs went extinct!",
-                start_x=512,
-                start_y=392,
-                color=arcade.color.BLACK,
-                font_size=20,
-                anchor_x="center"
-            )
-
     def on_key_press(self, key, modifiers):
         """Called whenever a key is pressed."""
 
-        if key == arcade.key.UP or key == arcade.key.W or key == arcade.key.SPACE:
+        if key == arcade.key.UP or key == arcade.key.W:
             if self.physics_engine.can_jump():
                 self.player_sprite.change_y = PLAYER_JUMP_SPEED
                 arcade.play_sound(self.jump_sound)
         elif key == arcade.key.LEFT or key == arcade.key.A:
-            self.left_pressed = True
+            self.player_sprite.change_x = -PLAYER_MOVEMENT_SPEED
         elif key == arcade.key.RIGHT or key == arcade.key.D:
-            self.right_pressed = True
-
-        self.process_keychange()
+            self.player_sprite.change_x = PLAYER_MOVEMENT_SPEED
 
     def on_key_release(self, key, modifiers):
         """Called when the user releases a key."""
 
         if key == arcade.key.LEFT or key == arcade.key.A:
-            self.left_pressed = False
+            self.player_sprite.change_x = 0
         elif key == arcade.key.RIGHT or key == arcade.key.D:
-            self.right_pressed = False
-        
-        self.process_keychange()
-
-    def process_keychange(self):
-         if self.right_pressed and not self.left_pressed:
-             self.move_right = True
-         elif self.left_pressed and not self.right_pressed:
-             self.move_left = True
-         else:
-             self.player_sprite.change_x = 0
+            self.player_sprite.change_x = 0
 
     def center_camera_to_player(self):
         screen_center_x = self.player_sprite.center_x - (self.camera.viewport_width / 2)
@@ -210,26 +285,14 @@ class MyGame(arcade.Window):
 
     def on_update(self, delta_time):
         """Movement and game logic"""
-        # Acceleration/deceleration logic
-        if self.move_right == True and self.right_pressed == True:
-             if self.player_sprite.change_x < PLAYER_MOVEMENT_SPEED:
-                 self.player_sprite.change_x += 1
-        elif self.move_right == True and self.right_pressed == False:
-             if self.player_sprite.change_x > 0:
-                 self.player_sprite.change_x -= 0.5
-             else:
-                 self.move_right = False
-        elif self.move_left == True and self.left_pressed == True:
-             if self.player_sprite.change_x > -PLAYER_MOVEMENT_SPEED:
-                 self.player_sprite.change_x -= 1
-        elif self.move_left == True and self.left_pressed == False:
-             if self.player_sprite.change_x < 0:
-                 self.player_sprite.change_x += 0.5
-             else:
-                 self.move_left = False
 
         # Move the player with the physics engine
         self.physics_engine.update()
+
+
+        self.scene.update_animation(
+            delta_time, [LAYER_NAME_PLAYER]
+        )
 
         # See if we hit any coins
         # coin_hit_list = arcade.check_for_collision_with_list(
@@ -249,15 +312,6 @@ class MyGame(arcade.Window):
         self.center_camera_to_player()
 
 
-        # Sign Collision Detection
-        # TODO: Add collision with each different type 
-        collision_list = arcade.check_for_collision_with_lists(self.player_sprite, [self.scene["Signs"]])
-        for collision in collision_list:
-            if self.scene["Signs"] in collision.sprite_lists: self.display_sign = True
-        
-        if not collision_list:
-            self.display_sign = False
-
 def main():
     """Main function"""
     window = MyGame()
@@ -267,19 +321,6 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 # """
@@ -354,7 +395,16 @@ if __name__ == "__main__":
 #         # Initialize camera
 #         self.camera = arcade.Camera(self.width, self.height)
 
-#         # Name of map file to load
+
+
+
+
+
+
+
+
+
+#  # Name of map file to load
 #         map_name = "assets/sand_map.json"
 
 #         # Layer specific options are defined based on Layer names in a dictionary
@@ -533,6 +583,10 @@ if __name__ == "__main__":
 
 # if __name__ == "__main__":
 #     main()
+
+
+
+
 
 
 
