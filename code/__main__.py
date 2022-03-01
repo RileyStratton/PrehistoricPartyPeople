@@ -2,6 +2,7 @@
 Platformer Game
 """
 import arcade
+import os
 
 # Constants
 SCREEN_WIDTH = 1000
@@ -9,16 +10,128 @@ SCREEN_HEIGHT = 650
 SCREEN_TITLE = "Platformer"
 
 # Constants used to scale our sprites from their original size
-CHARACTER_SCALING = 1
+CHARACTER_SCALING = 4
 TILE_SCALING = 0.5
 COIN_SCALING = 0.5
 SPRITE_PIXEL_SIZE = 128
 GRID_PIXEL_SIZE = SPRITE_PIXEL_SIZE * TILE_SCALING
 
+
+# Constants used to track if the player is facing left or right
+RIGHT_FACING = 0
+LEFT_FACING = 1
+
+
 # Movement speed of player, in pixels per frame
+UPDATES_PER_FRAME = 10
 PLAYER_MOVEMENT_SPEED = 10
 GRAVITY = 1
 PLAYER_JUMP_SPEED = 20
+
+LAYER_NAME_PLAYER = "Player"
+
+
+
+
+
+def load_texture_pair(filename):
+    """
+    Load a texture pair, with the second being a mirror image.
+    """
+    return [
+        arcade.load_texture(filename),
+        arcade.load_texture(filename, flipped_horizontally=True),
+
+    ]
+class PlayerCharacter(arcade.Sprite):
+    """Player Sprite"""
+
+    def __init__(self):
+
+        # Set up parent class
+        super().__init__()
+
+        # Default to face-right
+        self.character_face_direction = RIGHT_FACING
+
+        # Used for flipping between image sequences
+        self.cur_texture = 0
+        self.scale = CHARACTER_SCALING
+
+        # Track our state
+        self.jumping = False
+        
+
+        # --- Load Textures ---
+
+        
+        main_path = os.path.join("./assets/player")
+
+        # Load textures for idle standing
+        self.idle_texture_pair = load_texture_pair(f"{main_path}/player_0.png")
+        self.jump_texture_pair = load_texture_pair(f"{main_path}/jump_0.png")
+        self.fall_texture_pair = load_texture_pair(f"{main_path}/fall_0.png")
+        
+
+     
+        
+
+        # Load textures for walking
+        self.walk_textures = []
+        for i in range(7):
+            texture = load_texture_pair(f"{main_path}/player_{i}.png")
+            self.walk_textures.append(texture)
+
+
+
+        # Set the initial texture
+        self.texture = self.idle_texture_pair[0]
+
+        # Hit box will be set based on the first image used
+        self.hit_box = self.texture.hit_box_points
+
+    def update_animation(self, key, delta_time: float= 1 / 60):
+    
+        # Figure out if we need to flip face left or right
+        if self.change_x < 0 and self.character_face_direction == RIGHT_FACING:
+            self.character_face_direction = LEFT_FACING
+        elif self.change_x > 0 and self.character_face_direction == LEFT_FACING:
+            self.character_face_direction = RIGHT_FACING
+
+
+        
+        if self.change_y > 0:
+            self.texture = self.jump_texture_pair[self.character_face_direction]
+            return
+        elif self.change_y < 0:
+            self.texture = self.fall_texture_pair[self.character_face_direction]
+            return
+        
+
+
+
+        
+
+
+        # Idle animation
+        if self.change_x == 0:
+            self.texture = self.idle_texture_pair[self.character_face_direction]
+            return
+
+        # Walking animation
+        self.cur_texture += 1
+        if self.cur_texture > 6  * UPDATES_PER_FRAME:
+            self.cur_texture = 0
+        frame = self.cur_texture // UPDATES_PER_FRAME
+        self.texture = self.walk_textures[frame][
+            self.character_face_direction
+        ]
+
+
+        
+
+
+        
 
 
 class MyGame(arcade.Window):
@@ -84,15 +197,23 @@ class MyGame(arcade.Window):
         # from the map as SpriteLists in the scene in the proper order.
         self.scene = arcade.Scene.from_tilemap(self.tile_map)
 
-        # Keep track of the score
-        self.score = 0
 
+
+        
+     
         # Set up the player, specifically placing it at these coordinates.
-        image_source = ":resources:images/animated_characters/female_adventurer/femaleAdventurer_idle.png"
-        self.player_sprite = arcade.Sprite(image_source, CHARACTER_SCALING)
+        self.player_sprite = PlayerCharacter()
+    
         self.player_sprite.center_x = 128
         self.player_sprite.center_y = 128
-        self.scene.add_sprite("Player", self.player_sprite)
+        self.scene.add_sprite(LAYER_NAME_PLAYER, self.player_sprite)
+
+        
+
+
+
+
+
 
         # --- Other stuff
         # Set the background color
@@ -167,6 +288,11 @@ class MyGame(arcade.Window):
 
         # Move the player with the physics engine
         self.physics_engine.update()
+
+
+        self.scene.update_animation(
+            delta_time, [LAYER_NAME_PLAYER]
+        )
 
         # See if we hit any coins
         # coin_hit_list = arcade.check_for_collision_with_list(
