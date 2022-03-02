@@ -73,7 +73,7 @@ class PlayerCharacter(arcade.Sprite):
         self.fall_texture_pair = load_texture_pair(f"{main_path}/fall_0.png")
         
 
-     
+        
         
 
         # Load textures for walking
@@ -168,6 +168,10 @@ class MyGame(arcade.Window):
         # Load sounds
         self.collect_coin_sound = arcade.load_sound(":resources:sounds/coin1.wav")
         self.jump_sound = arcade.load_sound(":resources:sounds/jump1.wav")
+
+        # Load background sound
+        self.background_1 = arcade.load_sound("assets/sound/background/mp3/night-forest-with-insects.mp3")
+        arcade.play_sound(self.background_1, volume=0.25)
 
         arcade.set_background_color(arcade.csscolor.CORNFLOWER_BLUE)
 
