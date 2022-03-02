@@ -10,7 +10,7 @@ SCREEN_HEIGHT = 650
 SCREEN_TITLE = "Platformer"
 
 # Constants used to scale our sprites from their original size
-CHARACTER_SCALING = 4
+CHARACTER_SCALING = 1
 TILE_SCALING = 0.5
 COIN_SCALING = 0.5
 SPRITE_PIXEL_SIZE = 128
@@ -24,9 +24,9 @@ LEFT_FACING = 1
 
 # Movement speed of player, in pixels per frame
 UPDATES_PER_FRAME = 10
-PLAYER_MOVEMENT_SPEED = 10
+PLAYER_MOVEMENT_SPEED = 3
 GRAVITY = 1
-PLAYER_JUMP_SPEED = 20
+PLAYER_JUMP_SPEED = 10
 
 LAYER_NAME_PLAYER = "Player"
 
