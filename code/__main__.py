@@ -73,7 +73,7 @@ class PlayerCharacter(arcade.Sprite):
         self.fall_texture_pair = load_texture_pair(f"{main_path}/fall_0.png")
         
 
-     
+        
         
 
         # Load textures for walking
@@ -169,6 +169,10 @@ class MyGame(arcade.Window):
         self.collect_coin_sound = arcade.load_sound(":resources:sounds/coin1.wav")
         self.jump_sound = arcade.load_sound(":resources:sounds/jump1.wav")
 
+        # Load background sound
+        self.background_1 = arcade.load_sound("assets/sound/background/mp3/night-forest-with-insects.mp3")
+        arcade.play_sound(self.background_1, volume=0.25)
+
         arcade.set_background_color(arcade.csscolor.CORNFLOWER_BLUE)
 
     def setup(self):
@@ -253,7 +257,7 @@ class MyGame(arcade.Window):
     def on_key_press(self, key, modifiers):
         """Called whenever a key is pressed."""
 
-        if key == arcade.key.UP or key == arcade.key.W:
+        if key == arcade.key.UP or key == arcade.key.W or key == arcade.key.SPACE:
             if self.physics_engine.can_jump():
                 self.player_sprite.change_y = PLAYER_JUMP_SPEED
                 arcade.play_sound(self.jump_sound)
@@ -272,9 +276,7 @@ class MyGame(arcade.Window):
 
     def center_camera_to_player(self):
         screen_center_x = self.player_sprite.center_x - (self.camera.viewport_width / 2)
-        screen_center_y = self.player_sprite.center_y - (
-            self.camera.viewport_height / 2
-        )
+        screen_center_y = self.player_sprite.center_y - (self.camera.viewport_height / 2)
         if screen_center_x < 0:
             screen_center_x = 0
         if screen_center_y < 0:
