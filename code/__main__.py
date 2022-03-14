@@ -15,7 +15,6 @@ TILE_SCALING = 1.2
 COIN_SCALING = 0.5
 SPRITE_PIXEL_SIZE = 128
 GRID_PIXEL_SIZE = SPRITE_PIXEL_SIZE * TILE_SCALING
-ON_LEVEL_MAP = False
 
 
 # Constants used to track if the player is facing left or right
@@ -222,13 +221,6 @@ class MyGame(arcade.Window):
         self.player_sprite.center_y = 128
         self.scene.add_sprite(LAYER_NAME_PLAYER, self.player_sprite)
 
-        
-
-
-
-
-
-
         # --- Other stuff
         # Set the background color
         if self.tile_map.background_color:
@@ -246,14 +238,14 @@ class MyGame(arcade.Window):
         self.clear()
 
         # Activate the game camera
-        if ON_LEVEL_MAP:
+        if self.on_level_map:
             self.camera.use()
 
         # Draw our Scene
         self.scene.draw()
 
         # Activate the GUI camera before drawing GUI elements
-        if ON_LEVEL_MAP:
+        if self.on_level_map:
             self.gui_camera.use()
 
         # Draw our score on the screen, scrolling it with the viewport
@@ -327,18 +319,18 @@ class MyGame(arcade.Window):
             self.center_camera_to_player()
 
         # Sign Collision Detection
-        if not ON_LEVEL_MAP:
+        if not self.on_level_map:
             menu_collision_list = arcade.check_for_collision_with_lists(self.player_sprite, [self.scene["start"]])
             for collision in menu_collision_list:
                 if self.scene["start"] in collision.sprite_lists: 
-                    # ON_LEVEL_MAP = True
                     self.setup("./assets/sand_map.json")
-        elif ON_LEVEL_MAP:
-            collision_list = arcade.check_for_collision_with_lists(self.player_sprite, [
-                self.scene["cave"],
-                self.scene["forest"],
-                self.scene["swamp"],
-                self.scene["desert"]])
+        elif self.on_level_map:
+            # collision_list = arcade.check_for_collision_with_lists(self.player_sprite, [
+            #     self.scene["cave"],
+            #     self.scene["forest"],
+            #     self.scene["swamp"],
+            #     self.scene["desert"]])
+            pass
             # for collision in collision_list:
             #     if self.scene["dino"] in collision.sprite_lists: self.display_sign = True
             #     else: self.display_sign = False
