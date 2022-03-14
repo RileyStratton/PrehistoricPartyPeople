@@ -17,7 +17,7 @@
         {
          "draworder":"topdown",
          "id":2,
-         "name":"Object Layer 1",
+         "name":"start",
          "objects":[
                 {
                  "height":46.0218,
@@ -45,33 +45,6 @@
                  "width":37.8231,
                  "x":91.9526444653106,
                  "y":2836.95476447106
-                }, 
-                {
-                 "height":46.0218,
-                 "id":25,
-                 "name":"",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":95.1638,
-                 "x":369.74829243279,
-                 "y":3048.03209428136
-                }, 
-                {
-                 "height":18.8438,
-                 "id":26,
-                 "name":"",
-                 "rotation":0,
-                 "text":
-                    {
-                     "text":"Rules",
-                     "wrap":true
-                    },
-                 "type":"",
-                 "visible":true,
-                 "width":42.5033,
-                 "x":396.85829243279,
-                 "y":3062.01109428136
                 }, 
                 {
                  "gid":101,
