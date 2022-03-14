@@ -17,7 +17,7 @@
         {
          "draworder":"topdown",
          "id":2,
-         "name":"Object Layer 1",
+         "name":"start",
          "objects":[
                 {
                  "height":46.0218,
