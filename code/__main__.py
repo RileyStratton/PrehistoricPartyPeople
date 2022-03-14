@@ -15,6 +15,7 @@ TILE_SCALING = 1.2
 COIN_SCALING = 0.5
 SPRITE_PIXEL_SIZE = 128
 GRID_PIXEL_SIZE = SPRITE_PIXEL_SIZE * TILE_SCALING
+ON_LEVEL_MAP = False
 
 
 # Constants used to track if the player is facing left or right
@@ -175,15 +176,22 @@ class MyGame(arcade.Window):
 
         arcade.set_background_color(arcade.csscolor.CORNFLOWER_BLUE)
 
-    def setup(self):
+    def setup(self, current_map):
         """Set up the game here. Call this function to restart the game."""
 
+        # If we're on the start or end screen, we don't want the camera
+        if current_map != "./assets/sand_map.json":
+            ON_LEVEL_MAP = False
+        else:
+            ON_LEVEL_MAP = True
+
         # Setup the Cameras
-        self.camera = arcade.Camera(self.width, self.height)
-        self.gui_camera = arcade.Camera(self.width, self.height)
+        if ON_LEVEL_MAP:
+            self.camera = arcade.Camera(self.width, self.height)
+            self.gui_camera = arcade.Camera(self.width, self.height)
 
         # Name of map file to load
-        map_name = "./assets/title.json"
+        map_name = current_map
 
         # Layer specific options are defined based on Layer names in a dictionary
         # Doing this will make the SpriteList for the platforms layer
@@ -236,13 +244,15 @@ class MyGame(arcade.Window):
         self.clear()
 
         # Activate the game camera
-        self.camera.use()
+        if ON_LEVEL_MAP:
+            self.camera.use()
 
         # Draw our Scene
         self.scene.draw()
 
         # Activate the GUI camera before drawing GUI elements
-        self.gui_camera.use()
+        if ON_LEVEL_MAP:
+            self.gui_camera.use()
 
         # Draw our score on the screen, scrolling it with the viewport
         score_text = f"Score: {self.score}"
@@ -311,13 +321,20 @@ class MyGame(arcade.Window):
         #     self.score += 1
 
         # Position the camera
-        self.center_camera_to_player()
+        if ON_LEVEL_MAP:
+            self.center_camera_to_player()
+
+        # Sign Collision Detection
+        collision_list = arcade.check_for_collision_with_lists(self.player_sprite, [self.scene["Signs"]])
+        for collision in collision_list:
+            if self.scene["start"] in collision.sprite_lists: self.setup("../assets/sand_map.json")
+        else: self.display_sign = False
 
 
 def main():
     """Main function"""
     window = MyGame()
-    window.setup()
+    window.setup("./assets/title.json")
     arcade.run()
 
 
@@ -571,7 +588,7 @@ if __name__ == "__main__":
 
 
 #         # Sign Collision Detection
-#         sign_collision = arcade.check_for_collision_with_list(self.player_sprite, self.scene["Signs"])
+#         collision_list = arcade.check_for_collision_with_lists(self.player_sprite, [self.scene["Signs"])
 #         if sign_collision: self.display_sign = True
 #         else: self.display_sign = False
 
