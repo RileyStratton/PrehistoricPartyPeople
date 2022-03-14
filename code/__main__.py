@@ -313,6 +313,12 @@ class MyGame(arcade.Window):
         # Position the camera
         self.center_camera_to_player()
 
+        # Sign Collision Detection
+        collision_list = arcade.check_for_collision_with_lists(self.player_sprite, [self.scene["Signs"]])
+        for collision in collision_list:
+            if self.scene["start"] in collision.sprite_lists: self.setup("../assets/sand_map.json")
+        else: self.display_sign = False
+
 
 def main():
     """Main function"""
@@ -571,7 +577,7 @@ if __name__ == "__main__":
 
 
 #         # Sign Collision Detection
-#         sign_collision = arcade.check_for_collision_with_list(self.player_sprite, self.scene["Signs"])
+#         collision_list = arcade.check_for_collision_with_lists(self.player_sprite, [self.scene["Signs"])
 #         if sign_collision: self.display_sign = True
 #         else: self.display_sign = False
 
