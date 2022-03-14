@@ -176,17 +176,19 @@ class MyGame(arcade.Window):
 
         arcade.set_background_color(arcade.csscolor.CORNFLOWER_BLUE)
 
+        self.on_level_map = False
+
     def setup(self, current_map):
         """Set up the game here. Call this function to restart the game."""
 
         # If we're on the start or end screen, we don't want the camera
         if current_map != "./assets/sand_map.json":
-            ON_LEVEL_MAP = False
+            self.on_level_map = False
         else:
-            ON_LEVEL_MAP = True
+            self.on_level_map = True
 
         # Setup the Cameras
-        if ON_LEVEL_MAP:
+        if self.on_level_map:
             self.camera = arcade.Camera(self.width, self.height)
             self.gui_camera = arcade.Camera(self.width, self.height)
 
@@ -321,18 +323,22 @@ class MyGame(arcade.Window):
         #     self.score += 1
 
         # Position the camera
-        if ON_LEVEL_MAP:
+        if self.on_level_map:
             self.center_camera_to_player()
 
         # Sign Collision Detection
         if not ON_LEVEL_MAP:
-            collision_list = arcade.check_for_collision_with_lists(self.player_sprite, [self.scene["start"]])
-            for collision in collision_list:
-                if self.scene["start"] in collision.sprite_lists: self.setup("../assets/sand_map.json")
-                else: self.display_sign = False
-        if ON_LEVEL_MAP:
-            pass
-            # collision_list = arcade.check_for_collision_with_lists(self.player_sprite, [self.scene["dino"]])
+            menu_collision_list = arcade.check_for_collision_with_lists(self.player_sprite, [self.scene["start"]])
+            for collision in menu_collision_list:
+                if self.scene["start"] in collision.sprite_lists: 
+                    # ON_LEVEL_MAP = True
+                    self.setup("./assets/sand_map.json")
+        elif ON_LEVEL_MAP:
+            collision_list = arcade.check_for_collision_with_lists(self.player_sprite, [
+                self.scene["cave"],
+                self.scene["forest"],
+                self.scene["swamp"],
+                self.scene["desert"]])
             # for collision in collision_list:
             #     if self.scene["dino"] in collision.sprite_lists: self.display_sign = True
             #     else: self.display_sign = False
