@@ -325,10 +325,17 @@ class MyGame(arcade.Window):
             self.center_camera_to_player()
 
         # Sign Collision Detection
-        collision_list = arcade.check_for_collision_with_lists(self.player_sprite, [self.scene["start"]])
-        for collision in collision_list:
-            if self.scene["start"] in collision.sprite_lists: self.setup("../assets/sand_map.json")
-        else: self.display_sign = False
+        if not ON_LEVEL_MAP:
+            collision_list = arcade.check_for_collision_with_lists(self.player_sprite, [self.scene["start"]])
+            for collision in collision_list:
+                if self.scene["start"] in collision.sprite_lists: self.setup("../assets/sand_map.json")
+                else: self.display_sign = False
+        if ON_LEVEL_MAP:
+            pass
+            # collision_list = arcade.check_for_collision_with_lists(self.player_sprite, [self.scene["dino"]])
+            # for collision in collision_list:
+            #     if self.scene["dino"] in collision.sprite_lists: self.display_sign = True
+            #     else: self.display_sign = False
 
 
 def main():
