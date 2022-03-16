@@ -31,9 +31,6 @@ PLAYER_JUMP_SPEED = 17
 LAYER_NAME_PLAYER = "Player"
 
 
-
-
-
 def load_texture_pair(filename):
     """
     Load a texture pair, with the second being a mirror image.
@@ -72,17 +69,11 @@ class PlayerCharacter(arcade.Sprite):
         self.jump_texture_pair = load_texture_pair(f"{main_path}/jump_0.png")
         self.fall_texture_pair = load_texture_pair(f"{main_path}/fall_0.png")
         
-
-        
-        
-
         # Load textures for walking
         self.walk_textures = []
         for i in range(7):
             texture = load_texture_pair(f"{main_path}/player_{i}.png")
             self.walk_textures.append(texture)
-
-
 
         # Set the initial texture
         self.texture = self.idle_texture_pair[0]
@@ -106,12 +97,6 @@ class PlayerCharacter(arcade.Sprite):
         elif self.change_y < 0:
             self.texture = self.fall_texture_pair[self.character_face_direction]
             return
-        
-
-
-
-        
-
 
         # Idle animation
         if self.change_x == 0:
@@ -126,12 +111,6 @@ class PlayerCharacter(arcade.Sprite):
         self.texture = self.walk_textures[frame][
             self.character_face_direction
         ]
-
-
-        
-
-
-        
 
 
 class MyGame(arcade.Window):
@@ -170,8 +149,17 @@ class MyGame(arcade.Window):
         self.jump_sound = arcade.load_sound(":resources:sounds/jump1.wav")
 
         # Load background sound
-        self.background_1 = arcade.load_sound("assets/sound/background/mp3/night-forest-with-insects.mp3")
-        arcade.play_sound(self.background_1, volume=0.25)
+        self.background_1 = arcade.load_sound("assets/sound/background/field_theme_1.wav")
+        self.background_2 = arcade.load_sound("assets/sound/background/night_theme_1.wav")
+        self.background_3 = arcade.load_sound("assets/sound/background/dungeon_theme_1.wav")
+        self.background_4 = arcade.load_sound("assets/sound/background/cave_theme_1.wav")
+
+        # Load dinosaur sounds
+        self.dinosaur_growl = arcade.load_sound("assets/sound/fx/dinosuar_growl_3.wav")
+
+        self.background_player = None
+
+        arcade.play_sound(self.background_1, volume=0.15)
 
         arcade.set_background_color(arcade.csscolor.CORNFLOWER_BLUE)
 
@@ -209,11 +197,7 @@ class MyGame(arcade.Window):
         # Initialize Scene with our TileMap, this will automatically add all layers
         # from the map as SpriteLists in the scene in the proper order.
         self.scene = arcade.Scene.from_tilemap(self.tile_map)
-
-
-
         
-     
         # Set up the player, specifically placing it at these coordinates.
         self.player_sprite = PlayerCharacter()
     
@@ -258,13 +242,28 @@ class MyGame(arcade.Window):
             18,
         )
 
+        # ------------ TESTING ------------
+        # arcade.draw_text(
+        #     text=f"x-position: {self.player_sprite.center_x}",
+        #     start_x=120,
+        #     start_y=10,
+        #     font_size=18
+        # )
+
+        # arcade.draw_text(
+        #     text=f"y-position: {self.player_sprite.center_y}",
+        #     start_x=420,
+        #     start_y=10,
+        #     font_size=18
+        # )
+
     def on_key_press(self, key, modifiers):
         """Called whenever a key is pressed."""
 
         if key == arcade.key.UP or key == arcade.key.W or key == arcade.key.SPACE:
             if self.physics_engine.can_jump():
                 self.player_sprite.change_y = PLAYER_JUMP_SPEED
-                arcade.play_sound(self.jump_sound)
+                arcade.play_sound(self.jump_sound, volume=0.25)
         elif key == arcade.key.LEFT or key == arcade.key.A:
             self.player_sprite.change_x = -PLAYER_MOVEMENT_SPEED
         elif key == arcade.key.RIGHT or key == arcade.key.D:
@@ -295,7 +294,6 @@ class MyGame(arcade.Window):
         # Move the player with the physics engine
         self.physics_engine.update()
 
-
         self.scene.update_animation(
             delta_time, [LAYER_NAME_PLAYER]
         )
@@ -324,15 +322,27 @@ class MyGame(arcade.Window):
             for collision in menu_collision_list:
                 if self.scene["start"] in collision.sprite_lists: 
                     self.setup("./assets/sand_map.json")
-        elif self.on_level_map:
-            # collision_list = arcade.check_for_collision_with_lists(self.player_sprite, [
-            #     self.scene["cave"],
-            #     self.scene["forest"],
-            #     self.scene["swamp"],
-            #     self.scene["desert"]])
+        # elif self.on_level_map:
+        #     collision_list = arcade.check_for_collision_with_lists(self.player_sprite, [
+        #         self.scene["cave"],
+        #         self.scene["forest"],
+        #         self.scene["swamp"],
+        #         self.scene["desert"]])
+        #     for collision in collision_list:
+        #         if self.scene["cave"] in collision.sprite_lists:
+        #             arcade.play_sound(self.background_3)
+        #         elif self.scene["forest"] in collision.sprite_lists:
+        #             arcade.play_sound(self.background_1)
+        #         elif self.scene["desert"] in collision.sprite_lists:
+        #             arcade.play_sound(self.background_2)
+        #         elif self.scene["swamp"] in collision.sprite_lists:
+        #             arcade.play_sound(self.background_4)
+            
             pass
             # for collision in collision_list:
-            #     if self.scene["dino"] in collision.sprite_lists: self.display_sign = True
+            #     if self.scene["dino"] in collision.sprite_lists: 
+            #       self.display_sign = True
+            #       arcade.play_sound(self.dinosuar_growl)
             #     else: self.display_sign = False
 
 
