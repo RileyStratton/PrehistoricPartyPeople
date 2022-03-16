@@ -154,6 +154,9 @@ class MyGame(arcade.Window):
         self.background_3 = arcade.load_sound("assets/sound/background/dungeon_theme_1.wav")
         self.background_4 = arcade.load_sound("assets/sound/background/cave_theme_1.wav")
 
+        # Load dinosaur sounds
+        self.dinosaur_growl = arcade.load_sound("assets/sound/fx/dinosuar_growl_3.wav")
+
         self.background_player = None
 
         arcade.play_sound(self.background_1, volume=0.15)
@@ -240,19 +243,19 @@ class MyGame(arcade.Window):
         )
 
         # ------------ TESTING ------------
-        arcade.draw_text(
-            text=f"x-position: {self.player_sprite.center_x}",
-            start_x=120,
-            start_y=10,
-            font_size=18
-        )
+        # arcade.draw_text(
+        #     text=f"x-position: {self.player_sprite.center_x}",
+        #     start_x=120,
+        #     start_y=10,
+        #     font_size=18
+        # )
 
-        arcade.draw_text(
-            text=f"y-position: {self.player_sprite.center_y}",
-            start_x=420,
-            start_y=10,
-            font_size=18
-        )
+        # arcade.draw_text(
+        #     text=f"y-position: {self.player_sprite.center_y}",
+        #     start_x=420,
+        #     start_y=10,
+        #     font_size=18
+        # )
 
     def on_key_press(self, key, modifiers):
         """Called whenever a key is pressed."""
@@ -319,15 +322,27 @@ class MyGame(arcade.Window):
             for collision in menu_collision_list:
                 if self.scene["start"] in collision.sprite_lists: 
                     self.setup("./assets/sand_map.json")
-        elif self.on_level_map:
-            # collision_list = arcade.check_for_collision_with_lists(self.player_sprite, [
-            #     self.scene["cave"],
-            #     self.scene["forest"],
-            #     self.scene["swamp"],
-            #     self.scene["desert"]])
+        # elif self.on_level_map:
+        #     collision_list = arcade.check_for_collision_with_lists(self.player_sprite, [
+        #         self.scene["cave"],
+        #         self.scene["forest"],
+        #         self.scene["swamp"],
+        #         self.scene["desert"]])
+        #     for collision in collision_list:
+        #         if self.scene["cave"] in collision.sprite_lists:
+        #             arcade.play_sound(self.background_3)
+        #         elif self.scene["forest"] in collision.sprite_lists:
+        #             arcade.play_sound(self.background_1)
+        #         elif self.scene["desert"] in collision.sprite_lists:
+        #             arcade.play_sound(self.background_2)
+        #         elif self.scene["swamp"] in collision.sprite_lists:
+        #             arcade.play_sound(self.background_4)
+            
             pass
             # for collision in collision_list:
-            #     if self.scene["dino"] in collision.sprite_lists: self.display_sign = True
+            #     if self.scene["dino"] in collision.sprite_lists: 
+            #       self.display_sign = True
+            #       arcade.play_sound(self.dinosuar_growl)
             #     else: self.display_sign = False
 
 
