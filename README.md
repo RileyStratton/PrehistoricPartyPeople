@@ -10,7 +10,7 @@ Learn about dinosaurs while inviting them to a party! Hopefully you can remember
 
 ## Development Environment
 Programming Language:
-* __Python 3.9.7__
+* __Python 3.10.2__
 
 Modules and Libraries:
 * __JSON:__ Provides functionality to read .json files to Python dictionaries and store dictionaries to .json files
