@@ -165,7 +165,8 @@ class MyGame(arcade.Window):
 
         self.on_level_map = False
 
-        self.display_sign = False
+        self.display_instructions = False
+        self.display_tric = False
 
     def setup(self, current_map):
         """Set up the game here. Call this function to restart the game."""
@@ -244,26 +245,27 @@ class MyGame(arcade.Window):
             18,
         )
 
-        if self.display_sign:
-            if not self.on_level_map:
-                arcade.draw_text(
-                    text = "Continue forward to see how dinosaurs went extinct!",
-                    start_x=512,
-                    start_y=392,
-                    color=arcade.color.BLACK,
-                    font_size=20,
-                    anchor_x="center"
-                )
+        if self.display_instructions:
+            arcade.draw_text(
+                text = "Continue forward to see how dinosaurs went extinct!",
+                start_x=512,
+                start_y=392,
+                color=arcade.color.BLACK,
+                font_size=20,
+                anchor_x="center"
+            )
 
-            elif self.on_level_map:
-                arcade.draw_text(
-                    text = "Continue forward to see how dinosaurs went extinct!",
-                    start_x=512,
-                    start_y=392,
-                    color=arcade.color.BLACK,
-                    font_size=20,
-                    anchor_x="center"
-                )
+        if self.display_tric:
+            arcade.draw_text(
+                text = "Continue forward to see how dinosaurs went extinct!",
+                start_x=512,
+                start_y=392,
+                color=arcade.color.BLACK,
+                font_size=20,
+                anchor_x="center"
+            )
+
+
 
         # ------------ TESTING ------------
         # arcade.draw_text(
@@ -349,10 +351,10 @@ class MyGame(arcade.Window):
                 if self.scene["Start"] in collision.sprite_lists: 
                     self.setup("./assets/sand_map.json")
                 elif self.scene["Instructions"] in collision.sprite_lists:
-                    self.display_sign = True
+                    self.display_instructions = True
                 elif self.scene["End"] in collision.sprite_lists:
                     quit()
-                else: self.display_sign = False
+            if len(menu_collision_list) == 0: self.display_instructions = False
 
 
         elif self.on_level_map:
@@ -373,13 +375,12 @@ class MyGame(arcade.Window):
         #             arcade.play_sound(self.background_4)
 
 
-                if self.scene["dino"] in collision.sprite_lists: 
-                    self.display_sign = True
-                    arcade.play_sound(self.dinosuar_growl)
-                else: self.display_sign = False
+                if self.scene["Object"] in collision.sprite_lists: 
+                    self.display_tric = True
+                    arcade.play_sound(self.dinosaur_growl)
+            if len(collision_list) == 0: 
+                self.display_tric = False
             
-            
-
 
 def main():
     """Main function"""
