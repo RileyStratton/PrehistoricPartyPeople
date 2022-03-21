@@ -342,15 +342,15 @@ class MyGame(arcade.Window):
         # Sign Collision Detection
         if not self.on_level_map:
             menu_collision_list = arcade.check_for_collision_with_lists(self.player_sprite, [
-                self.scene["START"],
-                self.scene["EXIT"],
-                self.scene["INSTRUCTIONS"]])
+                self.scene["Start"],
+                self.scene["Exit"],
+                self.scene["Instructions"]])
             for collision in menu_collision_list:
-                if self.scene["START"] in collision.sprite_lists: 
+                if self.scene["Start"] in collision.sprite_lists: 
                     self.setup("./assets/sand_map.json")
-                elif self.scene["INSTRUCTIONS"] in collision.sprite_lists:
+                elif self.scene["Instructions"] in collision.sprite_lists:
                     self.display_sign = True
-                elif self.scene["END"] in collision.sprite_lists:
+                elif self.scene["End"] in collision.sprite_lists:
                     quit()
                 else: self.display_sign = False
 
