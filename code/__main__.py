@@ -242,21 +242,6 @@ class MyGame(arcade.Window):
             18,
         )
 
-        # ------------ TESTING ------------
-        # arcade.draw_text(
-        #     text=f"x-position: {self.player_sprite.center_x}",
-        #     start_x=120,
-        #     start_y=10,
-        #     font_size=18
-        # )
-
-        # arcade.draw_text(
-        #     text=f"y-position: {self.player_sprite.center_y}",
-        #     start_x=420,
-        #     start_y=10,
-        #     font_size=18
-        # )
-
     def on_key_press(self, key, modifiers):
         """Called whenever a key is pressed."""
 
