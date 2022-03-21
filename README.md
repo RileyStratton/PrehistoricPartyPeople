@@ -23,6 +23,7 @@ Modules and Libraries:
 * Elinore Wright
 * Riley Stratton
 * TJ Putnam
+* Kendrick Mausisa
 
 ## Useful Websites
 
