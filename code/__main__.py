@@ -165,6 +165,8 @@ class MyGame(arcade.Window):
 
         self.on_level_map = False
 
+        self.display_sign = False
+
     def setup(self, current_map):
         """Set up the game here. Call this function to restart the game."""
 
@@ -242,6 +244,42 @@ class MyGame(arcade.Window):
             18,
         )
 
+        if self.display_sign:
+            if not self.on_level_map:
+                arcade.draw_text(
+                    text = "Continue forward to see how dinosaurs went extinct!",
+                    start_x=512,
+                    start_y=392,
+                    color=arcade.color.BLACK,
+                    font_size=20,
+                    anchor_x="center"
+                )
+
+            elif self.on_level_map:
+                arcade.draw_text(
+                    text = "Continue forward to see how dinosaurs went extinct!",
+                    start_x=512,
+                    start_y=392,
+                    color=arcade.color.BLACK,
+                    font_size=20,
+                    anchor_x="center"
+                )
+
+        # ------------ TESTING ------------
+        # arcade.draw_text(
+        #     text=f"x-position: {self.player_sprite.center_x}",
+        #     start_x=120,
+        #     start_y=10,
+        #     font_size=18
+        # )
+
+        # arcade.draw_text(
+        #     text=f"y-position: {self.player_sprite.center_y}",
+        #     start_x=420,
+        #     start_y=10,
+        #     font_size=18
+        # )
+
     def on_key_press(self, key, modifiers):
         """Called whenever a key is pressed."""
 
@@ -303,17 +341,28 @@ class MyGame(arcade.Window):
 
         # Sign Collision Detection
         if not self.on_level_map:
-            menu_collision_list = arcade.check_for_collision_with_lists(self.player_sprite, [self.scene["start"]])
+            menu_collision_list = arcade.check_for_collision_with_lists(self.player_sprite, [
+                self.scene["START"],
+                self.scene["EXIT"],
+                self.scene["INSTRUCTIONS"]])
             for collision in menu_collision_list:
-                if self.scene["start"] in collision.sprite_lists: 
+                if self.scene["START"] in collision.sprite_lists: 
                     self.setup("./assets/sand_map.json")
-        # elif self.on_level_map:
-        #     collision_list = arcade.check_for_collision_with_lists(self.player_sprite, [
+                elif self.scene["INSTRUCTIONS"] in collision.sprite_lists:
+                    self.display_sign = True
+                elif self.scene["END"] in collision.sprite_lists:
+                    quit()
+                else: self.display_sign = False
+
+
+        elif self.on_level_map:
+            collision_list = arcade.check_for_collision_with_lists(self.player_sprite, [
         #         self.scene["cave"],
         #         self.scene["forest"],
         #         self.scene["swamp"],
-        #         self.scene["desert"]])
-        #     for collision in collision_list:
+        #         self.scene["desert"]
+                self.scene["Object"]])
+            for collision in collision_list:
         #         if self.scene["cave"] in collision.sprite_lists:
         #             arcade.play_sound(self.background_3)
         #         elif self.scene["forest"] in collision.sprite_lists:
@@ -322,13 +371,14 @@ class MyGame(arcade.Window):
         #             arcade.play_sound(self.background_2)
         #         elif self.scene["swamp"] in collision.sprite_lists:
         #             arcade.play_sound(self.background_4)
+
+
+                if self.scene["dino"] in collision.sprite_lists: 
+                    self.display_sign = True
+                    arcade.play_sound(self.dinosuar_growl)
+                else: self.display_sign = False
             
-            pass
-            # for collision in collision_list:
-            #     if self.scene["dino"] in collision.sprite_lists: 
-            #       self.display_sign = True
-            #       arcade.play_sound(self.dinosuar_growl)
-            #     else: self.display_sign = False
+            
 
 
 def main():
