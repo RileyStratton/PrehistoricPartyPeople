@@ -1,65 +1,65 @@
-[
-    {
+{
+    "para": {
         "ID": "0",
         "Name": "Parasaurolophus ",
         "TimePeriod": "Cretaceous",
         "Diet": "Herbivore",
         "Location": "North America & Asia"
     },
-    {
+    "tric": {
         "ID": "1",
         "Name": "Triceratops",
         "TimePeriod": "Cretaceous",
         "Diet": "Herbivore",
         "Location": "Western North America"
     },
-    {
+    "velo": {
         "ID": "2",
         "Name": "Velociraptor",
         "TimePeriod": "Cretaceous",
         "Diet": "Carnivore",
         "Location": "Central & East Asia"
     },
-    {
+    "steg": {
         "ID": "3",
         "Name": "Stegosaurus",
         "TimePeriod": "Jurassic",
         "Diet": "Herbivore",
         "Location": "Western US & Portual"
     },
-    {
+    "pter": {
         "ID": "4",
         "Name": "Pterodactyl",
         "TimePeriod": "Jurassic & Cretaceous",
         "Diet": "Carnivore",
         "Location": "Germany"
     },
-    {
+    "trex": {
         "ID": "5",
         "Name": "T-rex",
         "TimePeriod": "Cretaceous",
         "Diet": "Carnivore",
         "Location": "Northwest US"
     },
-    {
+    "brac": {
         "ID": "6",
         "Name": "Brachiosaurus",
         "TimePeriod": "Jurassic",
         "Diet": "Herbivore",
         "Location": "North America"
     },
-    {
+    "spin": {
         "ID": "7",
         "Name": "Spinosaurus",
         "TimePeriod": "Cretaceous",
         "Diet": "Carnivore",
         "Location": "North Africa"
     },
-    {
+    "giga": {
         "ID": "8",
         "Name": "Giganotosaurus",
         "TimePeriod": "Cretaceous",
         "Diet": "Carnivore",
         "Location": "Argentina"
     }
-]
+}
