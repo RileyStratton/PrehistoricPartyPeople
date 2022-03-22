@@ -35,10 +35,6 @@
         {
          "firstgid":1,
          "source":"swamp.tsx"
-        }, 
-        {
-         "firstgid":61,
-         "source":"cake.tsx"
         }],
  "tilewidth":32,
  "type":"map",
