@@ -4,7 +4,7 @@
      "export":
         {
          "format":"json",
-         "target":"..\/..\/..\/..\/..\/..\/..\/sand_map.json"
+         "target":"sand_map.json"
         }
     },
  "height":100,
@@ -146,35 +146,35 @@
  "tilesets":[
         {
          "firstgid":1,
-         "source":"..\/..\/..\/..\/assets\/sand.tsx"
+         "source":"sand.tsx"
         }, 
         {
          "firstgid":41,
-         "source":"..\/..\/..\/..\/assets\/dirt.tsx"
+         "source":"dirt.tsx"
         }, 
         {
          "firstgid":377,
-         "source":"..\/..\/..\/..\/assets\/swamp.tsx"
+         "source":"swamp.tsx"
         }, 
         {
          "firstgid":437,
-         "source":"..\/..\/..\/..\/assets\/tri.tsx"
+         "source":"tri.tsx"
         }, 
         {
          "firstgid":438,
-         "source":"..\/..\/..\/..\/assets\/tree.tsx"
+         "source":"tree.tsx"
         }, 
         {
          "firstgid":456,
-         "source":"..\/..\/..\/..\/assets\/bush.tsx"
+         "source":"bush.tsx"
         }, 
         {
          "firstgid":457,
-         "source":"..\/..\/..\/..\/assets\/grass.tsx"
+         "source":"grass.tsx"
         }, 
         {
          "firstgid":458,
-         "source":"..\/..\/..\/..\/assets\/Desert.tsx"
+         "source":"Desert.tsx"
         }, 
         {
          "firstgid":510,
