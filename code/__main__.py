@@ -354,6 +354,8 @@ class MyGame(arcade.Window):
         # Position the camera
         if self.on_level_map:
             self.center_camera_to_player()
+            if self.score >= 40:
+                self.setup("./assets/end.json")
 
         # Sign Collision Detection
         if not self.on_level_map:
