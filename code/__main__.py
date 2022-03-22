@@ -3,6 +3,7 @@ Platformer Game
 """
 import arcade
 import os
+import json
 
 # Constants
 SCREEN_WIDTH = 1000
@@ -29,6 +30,8 @@ GRAVITY = 1
 PLAYER_JUMP_SPEED = 17
 
 LAYER_NAME_PLAYER = "Player"
+
+DINO_DATA = json.load("./assets/dino_data.json")
 
 
 def load_texture_pair(filename):
@@ -165,8 +168,16 @@ class MyGame(arcade.Window):
 
         self.on_level_map = False
 
+        self.dino_set = set()
+
         self.display_instructions = False
-        self.display_tric = False
+        self.display_dino = False
+        self.current_dino = ""
+
+        self.draw_x = 512,
+        self.draw_y = 392,
+        self.draw_size = 15,
+        self.draw_anchor="center"
 
     def setup(self, current_map):
         """Set up the game here. Call this function to restart the game."""
@@ -248,21 +259,22 @@ class MyGame(arcade.Window):
         if self.display_instructions:
             arcade.draw_text(
                 text = "Continue forward to see how dinosaurs went extinct!",
-                start_x=512,
-                start_y=392,
-                color=arcade.color.BLACK,
-                font_size=20,
-                anchor_x="center"
+                start_x=self.draw_x,
+                start_y=self.draw_y,
+                font_size=self.draw_size,
+                anchor_x=self.draw_anchor,
+                color=arcade.color.BLACK
             )
 
-        if self.display_tric:
+        if self.display_dino:
+            draw_dino = DINO_DATA[self.current_dino]
             arcade.draw_text(
                 text = "Continue forward to see how dinosaurs went extinct!",
-                start_x=512,
-                start_y=392,
-                color=arcade.color.BLACK,
-                font_size=20,
-                anchor_x="center"
+                start_x=self.draw_x,
+                start_y=self.draw_y,
+                font_size=self.draw_size,
+                anchor_x=self.draw_anchor,
+                color=arcade.color.BLACK
             )
 
 
@@ -316,6 +328,8 @@ class MyGame(arcade.Window):
     def on_update(self, delta_time):
         """Movement and game logic"""
 
+        self.score = len(self.dino_set)
+
         # Move the player with the physics engine
         self.physics_engine.update()
 
@@ -347,13 +361,17 @@ class MyGame(arcade.Window):
                 self.scene["Start"],
                 self.scene["Exit"],
                 self.scene["Instructions"]])
+
             for collision in menu_collision_list:
                 if self.scene["Start"] in collision.sprite_lists: 
                     self.setup("./assets/sand_map.json")
+
                 elif self.scene["Instructions"] in collision.sprite_lists:
                     self.display_instructions = True
+
                 elif self.scene["End"] in collision.sprite_lists:
                     quit()
+
             if len(menu_collision_list) == 0: self.display_instructions = False
 
 
@@ -374,13 +392,63 @@ class MyGame(arcade.Window):
         #         elif self.scene["swamp"] in collision.sprite_lists:
         #             arcade.play_sound(self.background_4)
 
-
                 if self.scene["Object"] in collision.sprite_lists: 
-                    self.display_tric = True
+                    self.dino_set.add("tric")
+                    self.current_dino = "tric"
+                    self.display_dino = True
                     arcade.play_sound(self.dinosaur_growl)
+
+                # elif self.scene["para"] in collision.sprite_lists: 
+                #     self.dino_set.add("para")
+                #     self.current_dino = "para"
+                #     self.display_dino = True
+                #     arcade.play_sound(self.dinosaur_growl)
+
+                # elif self.scene["velo"] in collision.sprite_lists: 
+                #     self.dino_set.add("velo")
+                #     self.current_dino = "velo"
+                #     self.display_dino = True
+                #     arcade.play_sound(self.dinosaur_growl)
+
+                # elif self.scene["steg"] in collision.sprite_lists: 
+                #     self.dino_set.add("steg")
+                #     self.current_dino = "steg"
+                #     self.display_dino = True
+                #     arcade.play_sound(self.dinosaur_growl)
+
+                # elif self.scene["pter"] in collision.sprite_lists: 
+                #     self.dino_set.add("pter")
+                #     self.current_dino = "pter"
+                #     self.display_dino = True
+                #     arcade.play_sound(self.dinosaur_growl)
+
+                # elif self.scene["trex"] in collision.sprite_lists: 
+                #     self.dino_set.add("trex")
+                #     self.current_dino = "trex"
+                #     self.display_dino = True
+                #     arcade.play_sound(self.dinosaur_growl)
+
+                # elif self.scene["brac"] in collision.sprite_lists: 
+                #     self.dino_set.add("brac")
+                #     self.current_dino = "brac"
+                #     self.display_dino = True
+                #     arcade.play_sound(self.dinosaur_growl)
+
+                # elif self.scene["spin"] in collision.sprite_lists: 
+                #     self.dino_set.add("spin")
+                #     self.current_dino = "spin"
+                #     self.display_dino = True
+                #     arcade.play_sound(self.dinosaur_growl)
+
+                # elif self.scene["giga"] in collision.sprite_lists: 
+                #     self.dino_set.add("giga")
+                #     self.current_dino = "giga"
+                #     self.display_dino = True
+                #     arcade.play_sound(self.dinosaur_growl)
+
             if len(collision_list) == 0: 
-                self.display_tric = False
-            
+                self.display_dino = False
+                self.current_dino = ""        
 
 def main():
     """Main function"""
