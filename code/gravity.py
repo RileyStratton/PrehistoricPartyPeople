@@ -1,2 +1,0 @@
-class Gravity():
-    pass
