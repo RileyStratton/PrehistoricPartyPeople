@@ -31,7 +31,13 @@ PLAYER_JUMP_SPEED = 17
 
 LAYER_NAME_PLAYER = "Player"
 
-DINO_DATA = json.load("./assets/dino_data.json")
+DRAW_X = 512,
+DRAW_Y = 392,
+DRAW_SIZE = 20,
+DRAW_ANCHOR = "center"
+
+with open("./assets/dino_data.json") as infile:
+    DINO_DATA = json.load(infile)
 
 
 def load_texture_pair(filename):
@@ -174,10 +180,7 @@ class MyGame(arcade.Window):
         self.display_dino = False
         self.current_dino = ""
 
-        self.draw_x = 512,
-        self.draw_y = 392,
-        self.draw_size = 15,
-        self.draw_anchor="center"
+        
 
     def setup(self, current_map):
         """Set up the game here. Call this function to restart the game."""
@@ -259,10 +262,10 @@ class MyGame(arcade.Window):
         if self.display_instructions:
             arcade.draw_text(
                 text = "Continue forward to see how dinosaurs went extinct!",
-                start_x=self.draw_x,
-                start_y=self.draw_y,
-                font_size=self.draw_size,
-                anchor_x=self.draw_anchor,
+                start_x=512,
+                start_y=392,
+                font_size=20,
+                anchor_x="center",
                 color=arcade.color.BLACK
             )
 
@@ -270,10 +273,10 @@ class MyGame(arcade.Window):
             draw_dino = DINO_DATA[self.current_dino]
             arcade.draw_text(
                 text = "Continue forward to see how dinosaurs went extinct!",
-                start_x=self.draw_x,
-                start_y=self.draw_y,
-                font_size=self.draw_size,
-                anchor_x=self.draw_anchor,
+                start_x=512,
+                start_y=392,
+                font_size=20,
+                anchor_x="center",
                 color=arcade.color.BLACK
             )
 
