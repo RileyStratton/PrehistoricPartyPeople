@@ -17,7 +17,7 @@
         {
          "draworder":"topdown",
          "id":2,
-         "name":"Cake",
+         "name":"cake",
          "objects":[],
          "opacity":1,
          "type":"objectgroup",
@@ -27,8 +27,31 @@
         }, 
         {
          "draworder":"topdown",
+         "id":10,
+         "name":"para",
+         "objects":[
+                {
+                 "gid":71,
+                 "height":56.3582537005809,
+                 "id":13,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":64.3582537005809,
+                 "x":590.830054337643,
+                 "y":2853.73655611767
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "draworder":"topdown",
          "id":3,
-         "name":"Tri",
+         "name":"tic",
          "objects":[
                 {
                  "gid":61,
@@ -51,7 +74,7 @@
         {
          "draworder":"topdown",
          "id":8,
-         "name":"Brac",
+         "name":"brac",
          "objects":[
                 {
                  "gid":70,
@@ -74,7 +97,7 @@
         {
          "draworder":"topdown",
          "id":9,
-         "name":"Gig",
+         "name":"giga",
          "objects":[
                 {
                  "gid":69,
@@ -133,7 +156,7 @@
         {
          "draworder":"topdown",
          "id":4,
-         "name":"T-Rex",
+         "name":"trex",
          "objects":[
                 {
                  "gid":65,
@@ -156,7 +179,7 @@
         {
          "draworder":"topdown",
          "id":5,
-         "name":"Steg",
+         "name":"steg",
          "objects":[
                 {
                  "gid":64,
@@ -179,7 +202,7 @@
         {
          "draworder":"topdown",
          "id":6,
-         "name":"Spin",
+         "name":"spin",
          "objects":[
                 {
                  "gid":63,
@@ -202,7 +225,7 @@
         {
          "draworder":"topdown",
          "id":7,
-         "name":"Pter",
+         "name":"pter",
          "objects":[
                 {
                  "gid":62,
@@ -222,8 +245,8 @@
          "x":0,
          "y":0
         }],
- "nextlayerid":10,
- "nextobjectid":13,
+ "nextlayerid":11,
+ "nextobjectid":14,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.8.1",
@@ -260,6 +283,10 @@
         {
          "firstgid":70,
          "source":"brac.tsx"
+        }, 
+        {
+         "firstgid":71,
+         "source":"paris.tsx"
         }],
  "tilewidth":32,
  "type":"map",
