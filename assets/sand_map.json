@@ -321,7 +321,7 @@
         {
          "draworder":"topdown",
          "id":12,
-         "name":"spine",
+         "name":"spin",
          "objects":[
                 {
                  "gid":1549,
@@ -390,7 +390,7 @@
         {
          "draworder":"topdown",
          "id":16,
-         "name":"peter",
+         "name":"pter",
          "objects":[
                 {
                  "gid":1554,
