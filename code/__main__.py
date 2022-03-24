@@ -25,7 +25,7 @@ LEFT_FACING = 1
 
 # Movement speed of player, in pixels per frame
 UPDATES_PER_FRAME = 10
-PLAYER_MOVEMENT_SPEED = 10
+PLAYER_MOVEMENT_SPEED = 4
 GRAVITY = 1
 PLAYER_JUMP_SPEED = 17
 
