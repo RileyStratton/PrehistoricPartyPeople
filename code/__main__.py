@@ -49,6 +49,7 @@ def load_texture_pair(filename):
         arcade.load_texture(filename, flipped_horizontally=True),
 
     ]
+    
 class PlayerCharacter(arcade.Sprite):
     """Player Sprite"""
 
@@ -386,7 +387,7 @@ class MyGame(arcade.Window):
         #         self.scene["forest"],
         #         self.scene["swamp"],
         #         self.scene["desert"]
-                self.scene["Object"]])
+                self.scene["tric"]])
             for collision in collision_list:
         #         if self.scene["cave"] in collision.sprite_lists:
         #             arcade.play_sound(self.background_3)
@@ -397,7 +398,7 @@ class MyGame(arcade.Window):
         #         elif self.scene["swamp"] in collision.sprite_lists:
         #             arcade.play_sound(self.background_4)
 
-                if self.scene["Object"] in collision.sprite_lists: 
+                if self.scene["tric"] in collision.sprite_lists: 
                     self.dino_set.add("tric")
                     self.current_dino = "tric"
                     self.display_dino = True
