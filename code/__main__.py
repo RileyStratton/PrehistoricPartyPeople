@@ -154,7 +154,6 @@ class MyGame(arcade.Window):
         self.score = 0
 
         # Load sounds
-        self.collect_coin_sound = arcade.load_sound(":resources:sounds/coin1.wav")
         self.jump_sound = arcade.load_sound(":resources:sounds/jump1.wav")
 
         # Load background sound
@@ -309,22 +308,6 @@ class MyGame(arcade.Window):
             )
 
 
-
-        # ------------ TESTING ------------
-        # arcade.draw_text(
-        #     text=f"x-position: {self.player_sprite.center_x}",
-        #     start_x=120,
-        #     start_y=10,
-        #     font_size=18
-        # )
-
-        # arcade.draw_text(
-        #     text=f"y-position: {self.player_sprite.center_y}",
-        #     start_x=420,
-        #     start_y=10,
-        #     font_size=18
-        # )
-
     def on_key_press(self, key, modifiers):
         """Called whenever a key is pressed."""
 
@@ -367,20 +350,6 @@ class MyGame(arcade.Window):
         self.scene.update_animation(
             delta_time, [LAYER_NAME_PLAYER]
         )
-
-        # See if we hit any coins
-        # coin_hit_list = arcade.check_for_collision_with_list(
-        #     self.player_sprite, self.scene["Coins"]
-        # )
-
-        # Loop through each coin we hit (if any) and remove it
-        # for coin in coin_hit_list:
-        #     # Remove the coin
-        #     coin.remove_from_sprite_lists()
-        #     # Play a sound
-        #     arcade.play_sound(self.collect_coin_sound)
-        #     # Add one to the score
-        #     self.score += 1
 
         # Position the camera
         if self.on_level_map:
@@ -501,20 +470,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
