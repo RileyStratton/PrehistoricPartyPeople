@@ -56,6 +56,9 @@ class MyGame(arcade.Window):
         # Load dinosaur sounds
         self.dinosaur_growl = arcade.load_sound(constants.DINOSAUR_GROWL)
 
+        # if sound played
+        self.sound_played = False
+
         self.background_player = None
 
         arcade.play_sound(self.background_1, volume=0.15)
