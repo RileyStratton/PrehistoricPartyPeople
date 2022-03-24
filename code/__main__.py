@@ -8,7 +8,7 @@ import json
 # Constants
 SCREEN_WIDTH = 1000
 SCREEN_HEIGHT = 650
-SCREEN_TITLE = "Platformer"
+SCREEN_TITLE = "Prehistoric Party"
 
 # Constants used to scale our sprites from their original size
 CHARACTER_SCALING = 1.9
@@ -250,7 +250,7 @@ class MyGame(arcade.Window):
             self.gui_camera.use()
 
         # Draw our score on the screen, scrolling it with the viewport
-        score_text = f"Score: {self.score}"
+        score_text = f"Dinos Met: {self.score}/8"
         arcade.draw_text(
             score_text,
             10,
