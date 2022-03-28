@@ -4,6 +4,7 @@ Platformer Game
 import arcade
 import os
 import json
+import sys
 import constants
 from player import Player
 
@@ -199,9 +200,36 @@ class MyGame(arcade.Window):
 
         if self.display_instructions:
             arcade.draw_text(
-                text = "Continue forward to see how dinosaurs went extinct!",
+                text = "Welcome to the Prehistoric Party!",
                 start_x=500,
                 start_y=550,
+                font_size=20,
+                anchor_x="center",
+                color=arcade.color.WHITE
+            )
+
+            arcade.draw_text(
+                text = "Your task is to find the eight",
+                start_x=500,
+                start_y=525,
+                font_size=20,
+                anchor_x="center",
+                color=arcade.color.WHITE
+            )
+
+            arcade.draw_text(
+                text = "dinosaurs and invite them to the party.",
+                start_x=500,
+                start_y=500,
+                font_size=20,
+                anchor_x="center",
+                color=arcade.color.WHITE
+            )
+
+            arcade.draw_text(
+                text = "Use the arrow keys or WASD to move around.",
+                start_x=500,
+                start_y=475,
                 font_size=20,
                 anchor_x="center",
                 color=arcade.color.WHITE
@@ -213,6 +241,8 @@ class MyGame(arcade.Window):
             time = dino["TimePeriod"]
             diet = dino["Diet"]
             location = dino["Location"]
+
+
             arcade.draw_text(
                 text = f"Hi, I'm a {name}.",
                 start_x=500,
@@ -221,6 +251,7 @@ class MyGame(arcade.Window):
                 anchor_x="center",
                 color=arcade.color.WHITE
             )
+
             arcade.draw_text(
                 text = f"I'm from the {time} period.",
                 start_x=500,
@@ -229,6 +260,7 @@ class MyGame(arcade.Window):
                 anchor_x="center",
                 color=arcade.color.WHITE
             )
+
             arcade.draw_text(
                 text = f"I live near {location}",
                 start_x=500,
@@ -237,6 +269,7 @@ class MyGame(arcade.Window):
                 anchor_x="center",
                 color=arcade.color.WHITE
             )
+
             arcade.draw_text(
                 text = f"and I'm a {diet}.",
                 start_x=500,
@@ -313,7 +346,7 @@ class MyGame(arcade.Window):
                     self.display_instructions = True
 
                 elif self.scene["End"] in collision.sprite_lists:
-                    quit()
+                    sys.exit()
 
             if len(menu_collision_list) == 0: self.display_instructions = False
 
@@ -324,10 +357,10 @@ class MyGame(arcade.Window):
                 self.scene["swamp_collision"],
                 self.scene["desert_collision"],
                 self.scene["cave_collision"],
-                self.scene["cave"],
-                self.scene["forest"],
-                # self.scene["swamp"],
-                self.scene["desert"],
+                # self.scene["cave"],
+                # self.scene["forest"],
+                # # self.scene["swamp"],
+                # self.scene["desert"],
                 self.scene["tric"],
                 self.scene["para"],
                 # self.scene["velo"],
