@@ -4,6 +4,8 @@ Platformer Game
 import arcade
 import os
 import json
+import constants
+from player import Player
 
 
 # Constants
@@ -41,194 +43,6 @@ DRAW_ANCHOR = "center"
 with open("./assets/dino_data.json") as infile:
     DINO_DATA = json.load(infile)
 
-
-def load_texture_pair(filename):
-    """
-    Load a texture pair, with the second being a mirror image.
-    """
-    return [
-        arcade.load_texture(filename),
-        arcade.load_texture(filename, flipped_horizontally=True),
-
-    ]
-class PlayerCharacter(arcade.Sprite):
-    """Player Sprite"""
-
-    def __init__(self):
-
-        # Set up parent class
-        super().__init__()
-
-        # Default to face-right
-        self.character_face_direction = RIGHT_FACING
-
-        # Used for flipping between image sequences
-        self.cur_texture = 0
-        self.scale = CHARACTER_SCALING
-
-        # Track our state
-        self.jumping = False
-        
-
-        # --- Load Textures ---
-
-        
-        main_path = os.path.join("./assets/player")
-
-        # Load textures for idle standing
-        self.idle_texture_pair = load_texture_pair(f"{main_path}/player_0.png")
-        self.jump_texture_pair = load_texture_pair(f"{main_path}/jump_0.png")
-        self.fall_texture_pair = load_texture_pair(f"{main_path}/fall_0.png")
-        
-        # Load textures for walking
-        self.walk_textures = []
-        for i in range(7):
-            texture = load_texture_pair(f"{main_path}/player_{i}.png")
-            self.walk_textures.append(texture)
-
-        # Set the initial texture
-        self.texture = self.idle_texture_pair[0]
-
-        # Hit box will be set based on the first image used
-        self.hit_box = self.texture.hit_box_points
-
-    def update_animation(self, key, delta_time: float= 1 / 60):
-    
-        # Figure out if we need to flip face left or right
-        if self.change_x < 0 and self.character_face_direction == RIGHT_FACING:
-            self.character_face_direction = LEFT_FACING
-        elif self.change_x > 0 and self.character_face_direction == LEFT_FACING:
-            self.character_face_direction = RIGHT_FACING
-
-
-        
-        if self.change_y > 0:
-            self.texture = self.jump_texture_pair[self.character_face_direction]
-            return
-        elif self.change_y < 0:
-            self.texture = self.fall_texture_pair[self.character_face_direction]
-            return
-
-        # Idle animation
-        if self.change_x == 0:
-            self.texture = self.idle_texture_pair[self.character_face_direction]
-            return
-
-        # Walking animation
-        self.cur_texture += 1
-        if self.cur_texture > 6  * UPDATES_PER_FRAME:
-            self.cur_texture = 0
-        frame = self.cur_texture // UPDATES_PER_FRAME
-        self.texture = self.walk_textures[frame][
-            self.character_face_direction
-        ]
-
-LAYER_NAME_PLAYER = "Player"
-
-
-
-
-
-def load_texture_pair(filename):
-    """
-    Load a texture pair, with the second being a mirror image.
-    """
-    return [
-        arcade.load_texture(filename),
-        arcade.load_texture(filename, flipped_horizontally=True),
-
-    ]
-class PlayerCharacter(arcade.Sprite):
-    """Player Sprite"""
-
-    def __init__(self):
-
-        # Set up parent class
-        super().__init__()
-
-        # Default to face-right
-        self.character_face_direction = RIGHT_FACING
-
-        # Used for flipping between image sequences
-        self.cur_texture = 0
-        self.scale = CHARACTER_SCALING
-
-        # Track our state
-        self.jumping = False
-        
-
-        # --- Load Textures ---
-
-        
-        main_path = os.path.join("./assets/player")
-
-        # Load textures for idle standing
-        self.idle_texture_pair = load_texture_pair(f"{main_path}/player_0.png")
-        self.jump_texture_pair = load_texture_pair(f"{main_path}/jump_0.png")
-        self.fall_texture_pair = load_texture_pair(f"{main_path}/fall_0.png")
-        
-
-     
-        
-
-        # Load textures for walking
-        self.walk_textures = []
-        for i in range(7):
-            texture = load_texture_pair(f"{main_path}/player_{i}.png")
-            self.walk_textures.append(texture)
-
-
-
-        # Set the initial texture
-        self.texture = self.idle_texture_pair[0]
-
-        # Hit box will be set based on the first image used
-        self.hit_box = self.texture.hit_box_points
-
-    def update_animation(self, key, delta_time: float= 1 / 60):
-    
-        # Figure out if we need to flip face left or right
-        if self.change_x < 0 and self.character_face_direction == RIGHT_FACING:
-            self.character_face_direction = LEFT_FACING
-        elif self.change_x > 0 and self.character_face_direction == LEFT_FACING:
-            self.character_face_direction = RIGHT_FACING
-
-
-        
-        if self.change_y > 0:
-            self.texture = self.jump_texture_pair[self.character_face_direction]
-            return
-        elif self.change_y < 0:
-            self.texture = self.fall_texture_pair[self.character_face_direction]
-            return
-        
-
-
-
-        
-
-
-        # Idle animation
-        if self.change_x == 0:
-            self.texture = self.idle_texture_pair[self.character_face_direction]
-            return
-
-        # Walking animation
-        self.cur_texture += 1
-        if self.cur_texture > 6  * UPDATES_PER_FRAME:
-            self.cur_texture = 0
-        frame = self.cur_texture // UPDATES_PER_FRAME
-        self.texture = self.walk_textures[frame][
-            self.character_face_direction
-        ]
-
-
-        
-
-
-        
-
-
 class MyGame(arcade.Window):
     """
     Main application class.
@@ -237,7 +51,11 @@ class MyGame(arcade.Window):
     def __init__(self):
 
         # Call the parent class and set up the window
-        super().__init__(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
+        super().__init__(
+            constants.SCREEN_WIDTH, 
+            constants.SCREEN_HEIGHT, 
+            constants.SCREEN_TITLE
+        )
 
         # Our TileMap Object
         self.tile_map = None
@@ -264,17 +82,29 @@ class MyGame(arcade.Window):
         self.jump_sound = arcade.load_sound(":resources:sounds/jump1.wav")
 
         # Load background sound
-        self.background_1 = arcade.load_sound("assets/sound/background/field_theme_1.wav")
-        self.background_2 = arcade.load_sound("assets/sound/background/night_theme_1.wav")
-        self.background_3 = arcade.load_sound("assets/sound/background/dungeon_theme_1.wav")
-        self.background_4 = arcade.load_sound("assets/sound/background/cave_theme_1.wav")
+
+        self.background_1 = arcade.load_sound(constants.BACKGROUND_1)
+        self.background_2 = arcade.load_sound(constants.BACKGROUND_2)
+        self.background_3 = arcade.load_sound(constants.BACKGROUND_3)
+        self.background_4 = arcade.load_sound(constants.BACKGROUND_4)
+
+        self.background_1_playing = False
+        self.background_2_playing = False
+        self.background_3_playing = False
+        self.background_4_playing = False
 
         # Load dinosaur sounds
-        self.dinosaur_growl = arcade.load_sound("assets/sound/fx/dinosuar_growl_3.wav")
+        self.dinosaur_growl = arcade.load_sound(constants.DINOSAUR_GROWL)
 
-        self.background_player = None
+        # if sound played
+        self.sound_played = False
 
-        arcade.play_sound(self.background_1, volume=0.15)
+        self.count = 0
+
+        self.background_1_player = None
+        self.background_2_player = None
+        self.background_3_player = None
+        self.background_4_player = None
 
         arcade.set_background_color(arcade.csscolor.CORNFLOWER_BLUE)
 
@@ -315,18 +145,17 @@ class MyGame(arcade.Window):
         }
 
         # Read in the tiled map
-        self.tile_map = arcade.load_tilemap(map_name, TILE_SCALING, layer_options)
+        self.tile_map = arcade.load_tilemap(map_name, constants.TILE_SCALING, layer_options)
 
         # Initialize Scene with our TileMap, this will automatically add all layers
         # from the map as SpriteLists in the scene in the proper order.
         self.scene = arcade.Scene.from_tilemap(self.tile_map)
 
         # Set up the player, specifically placing it at these coordinates.
-        self.player_sprite = PlayerCharacter()
-    
-        self.player_sprite.center_x = 128
-        self.player_sprite.center_y = 128
-        self.scene.add_sprite(LAYER_NAME_PLAYER, self.player_sprite)
+        self.player_sprite = Player()
+
+        # add sprite to scene
+        self.scene.add_sprite(constants.LAYER_NAME_PLAYER, self.player_sprite)
 
 
         # --- Other stuff
@@ -336,7 +165,9 @@ class MyGame(arcade.Window):
 
         # Create the 'physics engine'
         self.physics_engine = arcade.PhysicsEnginePlatformer(
-            self.player_sprite, gravity_constant=GRAVITY, walls=self.scene["Platforms"]
+            self.player_sprite, 
+            gravity_constant=constants.GRAVITY, 
+            walls=self.scene["Platforms"]
         )
 
     def on_draw(self):
@@ -359,11 +190,11 @@ class MyGame(arcade.Window):
         # Draw our score on the screen, scrolling it with the viewport
         score_text = f"Dinos Met: {self.score}/8"
         arcade.draw_text(
-            score_text,
-            10,
-            10,
-            arcade.csscolor.WHITE,
-            18,
+            text=score_text,
+            start_x=10,
+            start_y=10,
+            color=arcade.csscolor.WHITE,
+            font_size=18,
         )
 
         if self.display_instructions:
@@ -421,12 +252,12 @@ class MyGame(arcade.Window):
 
         if key == arcade.key.UP or key == arcade.key.W or key == arcade.key.SPACE:
             if self.physics_engine.can_jump():
-                self.player_sprite.change_y = PLAYER_JUMP_SPEED
-                arcade.play_sound(self.jump_sound, volume=0.25)
+                self.player_sprite.change_y = constants.PLAYER_JUMP_SPEED
+                arcade.play_sound(self.jump_sound, volume=0.05)
         elif key == arcade.key.LEFT or key == arcade.key.A:
-            self.player_sprite.change_x = -PLAYER_MOVEMENT_SPEED
+            self.player_sprite.change_x = -constants.PLAYER_MOVEMENT_SPEED
         elif key == arcade.key.RIGHT or key == arcade.key.D:
-            self.player_sprite.change_x = PLAYER_MOVEMENT_SPEED
+            self.player_sprite.change_x = constants.PLAYER_MOVEMENT_SPEED
 
     def on_key_release(self, key, modifiers):
         """Called when the user releases a key."""
@@ -457,7 +288,7 @@ class MyGame(arcade.Window):
 
 
         self.scene.update_animation(
-            delta_time, [LAYER_NAME_PLAYER]
+            delta_time, [constants.LAYER_NAME_PLAYER]
         )
 
 
@@ -489,6 +320,10 @@ class MyGame(arcade.Window):
 
         elif self.on_level_map:
             collision_list = arcade.check_for_collision_with_lists(self.player_sprite, [
+                self.scene["forest_collision"],
+                self.scene["swamp_collision"],
+                self.scene["desert_collision"],
+                self.scene["cave_collision"],
                 self.scene["cave"],
                 self.scene["forest"],
                 # self.scene["swamp"],
@@ -501,29 +336,50 @@ class MyGame(arcade.Window):
                 self.scene["trex"],
                 self.scene["brac"],
                 self.scene["spin"],
-                self.scene["giga"]
-                ])
+                self.scene["giga"],
+                self.scene["tric"]])
+                
             for collision in collision_list:
-                if self.scene["cave"] in collision.sprite_lists:
-                    arcade.play_sound(self.background_3)
-                elif self.scene["forest"] in collision.sprite_lists:
-                    arcade.play_sound(self.background_1)
-                elif self.scene["desert"] in collision.sprite_lists:
-                    arcade.play_sound(self.background_2)
-                # elif self.scene["swamp"] in collision.sprite_lists:
-                #     arcade.play_sound(self.background_4)
+                if self.scene["forest_collision"] in collision.sprite_lists:
+                    self.background_1_player = self.background_1.play(volume=0.5, loop=True)
+                    self.background_1_playing = True
+                    collision.remove_from_sprite_lists()
+                elif self.scene["desert_collision"] in collision.sprite_lists:
+                    self.background_1_player.pause()
+                    self.background_1_playing = False
+                    self.background_2_player = self.background_2.play(volume=0.5, loop=True)
+                    self.background_2_playing = True
+                    collision.remove_from_sprite_lists()
+                elif self.scene["swamp_collision"] in collision.sprite_lists:
+                    self.background_2_player.pause()
+                    self.background_2_playing = False
+                    self.background_3_player = self.background_3.play(volume=0.5, loop=True)
+                    self.background_3_playing = True
+                    collision.remove_from_sprite_lists()
+                elif self.scene["cave_collision"] in collision.sprite_lists:
+                    if self.background_2_playing:
+                        self.background_2_player.pause()
+                    elif self.background_3_playing:
+                        self.background_3_player.pause()
+                    self.background_4_player = self.background_4.play(volume=0.5, loop=True)
+                    self.background_4_playing = True
+                    collision.remove_from_sprite_lists()
 
                 elif self.scene["tric"] in collision.sprite_lists: 
                     self.dino_set.add("tric")
                     self.current_dino = "tric"
                     self.display_dino = True
-                    arcade.play_sound(self.dinosaur_growl)
+                    if not self.sound_played:
+                        arcade.play_sound(self.dinosaur_growl)
+                        self.sound_played = True
 
                 elif self.scene["para"] in collision.sprite_lists: 
                     self.dino_set.add("para")
                     self.current_dino = "para"
                     self.display_dino = True
-                    arcade.play_sound(self.dinosaur_growl)
+                    if not self.sound_played:
+                        arcade.play_sound(self.dinosaur_growl)
+                        self.sound_played = True
 
                 # elif self.scene["velo"] in collision.sprite_lists: 
                 #     self.dino_set.add("velo")
@@ -535,40 +391,53 @@ class MyGame(arcade.Window):
                     self.dino_set.add("steg")
                     self.current_dino = "steg"
                     self.display_dino = True
-                    arcade.play_sound(self.dinosaur_growl)
+                    if not self.sound_played:
+                        arcade.play_sound(self.dinosaur_growl)
+                        self.sound_played = True
 
                 elif self.scene["pter"] in collision.sprite_lists: 
                     self.dino_set.add("pter")
                     self.current_dino = "pter"
                     self.display_dino = True
-                    arcade.play_sound(self.dinosaur_growl)
+                    if not self.sound_played:
+                        arcade.play_sound(self.dinosaur_growl)
+                        self.sound_played = True
 
                 elif self.scene["trex"] in collision.sprite_lists: 
                     self.dino_set.add("trex")
                     self.current_dino = "trex"
                     self.display_dino = True
-                    arcade.play_sound(self.dinosaur_growl)
+                    if not self.sound_played:
+                        arcade.play_sound(self.dinosaur_growl)
+                        self.sound_played = True
 
                 elif self.scene["brac"] in collision.sprite_lists: 
                     self.dino_set.add("brac")
                     self.current_dino = "brac"
                     self.display_dino = True
-                    arcade.play_sound(self.dinosaur_growl)
+                    if not self.sound_played:
+                        arcade.play_sound(self.dinosaur_growl)
+                        self.sound_played = True
 
                 elif self.scene["spin"] in collision.sprite_lists: 
                     self.dino_set.add("spin")
                     self.current_dino = "spin"
                     self.display_dino = True
-                    arcade.play_sound(self.dinosaur_growl)
+                    if not self.sound_played:
+                        arcade.play_sound(self.dinosaur_growl)
+                        self.sound_played = True
 
                 elif self.scene["giga"] in collision.sprite_lists: 
                     self.dino_set.add("giga")
                     self.current_dino = "giga"
                     self.display_dino = True
-                    arcade.play_sound(self.dinosaur_growl)
+                    if not self.sound_played:
+                        arcade.play_sound(self.dinosaur_growl)
+                        self.sound_played = True
 
             if len(collision_list) == 0: 
                 self.display_dino = False
+                self.sound_played = False
                 self.current_dino = ""        
 
 def main():
@@ -580,3 +449,19 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
