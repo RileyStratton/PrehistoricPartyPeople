@@ -123,7 +123,7 @@ class MyGame(arcade.Window):
         """Set up the game here. Call this function to restart the game."""
 
         # If we're on the start or end screen, we don't want the camera
-        if current_map != "./assets/sand_map.json":
+        if current_map == "./assets/title.json":
             self.on_level_map = False
         else:
             self.on_level_map = True
