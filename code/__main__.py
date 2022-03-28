@@ -107,7 +107,7 @@ class MyGame(arcade.Window):
         self.background_3_player = None
         self.background_4_player = None
 
-        arcade.set_background_color(arcade.csscolor.CORNFLOWER_BLUE)
+        arcade.set_background_color(arcade.color.BABY_BLUE)
 
         self.on_level_map = False
 
