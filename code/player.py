@@ -22,6 +22,10 @@ class Player(arcade.Sprite):
         # Set up parent class
         super().__init__()
 
+        # setup player starting position
+        self.center_x = 128
+        self.center_y = 128
+
         # Default to face-right
         self.character_face_direction = constants.RIGHT_FACING
 
