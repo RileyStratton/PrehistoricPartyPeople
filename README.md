@@ -2,7 +2,7 @@
 
 ## Overview
 
-Learn about dinosaurs while inviting them to a party! Hopefully you can remember what food they like for the party!
+Learn about dinosaurs while inviting them to a party!
 
 A small adventure platformer where you meet and learn about dinosaurs. Use wasd or the arrow keys to move and jump around the map to find the dinosaurs.
 
@@ -31,4 +31,5 @@ Modules and Libraries:
 
 * Better user interface
 * Dinosaur animation
+* Screen changes for environments
 
