@@ -341,29 +341,59 @@ class MyGame(arcade.Window):
                 
             for collision in collision_list:
                 if self.scene["forest_collision"] in collision.sprite_lists:
-                    self.background_1_player = self.background_1.play(volume=0.5, loop=True)
-                    self.background_1_playing = True
-                    collision.remove_from_sprite_lists()
-                elif self.scene["desert_collision"] in collision.sprite_lists:
-                    self.background_1_player.pause()
-                    self.background_1_playing = False
-                    self.background_2_player = self.background_2.play(volume=0.5, loop=True)
-                    self.background_2_playing = True
-                    collision.remove_from_sprite_lists()
-                elif self.scene["swamp_collision"] in collision.sprite_lists:
-                    self.background_2_player.pause()
-                    self.background_2_playing = False
-                    self.background_3_player = self.background_3.play(volume=0.5, loop=True)
-                    self.background_3_playing = True
-                    collision.remove_from_sprite_lists()
-                elif self.scene["cave_collision"] in collision.sprite_lists:
+                    if not self.background_1_playing:
+                        print("playing background 1")
+                        self.background_1_player = self.background_1.play(volume=0.5, loop=True)
+                        self.background_1_playing = True
+
+                    # if the player comes from the second area => stop background 2 music
                     if self.background_2_playing:
                         self.background_2_player.pause()
-                    elif self.background_3_playing:
+                        self.background_2_playing = False
+
+                     # if the player comes from the second area => stop background 4 music
+                    elif self.background_4_playing:
+                        self.background_4_player.pause()
+                        self.background_4_playing = False
+                    
+                elif self.scene["desert_collision"] in collision.sprite_lists:
+                    if not self.background_2_playing:
+                        print("playing background 2")
+                        self.background_2_player = self.background_2.play(volume=0.5, loop=True)
+                        self.background_2_playing = True
+
+                    # if the player comes from the first area => stop background 1 music
+                    if self.background_1_playing:
+                        self.background_1_player.pause()
+                        self.background_1_playing = False
+
+                    # if the player comes from the third area area => stop background 3 music
+                    if self.background_3_playing:
                         self.background_3_player.pause()
-                    self.background_4_player = self.background_4.play(volume=0.5, loop=True)
-                    self.background_4_playing = True
-                    collision.remove_from_sprite_lists()
+                        self.background_3_playing = False
+
+                    # if the player comes from the fourth area => stop background 4 music
+                    elif self.background_4_playing:
+                        self.background_4_player.pause()
+                        self.background_4_playing = False
+                    
+                elif self.scene["swamp_collision"] in collision.sprite_lists:
+                    if not self.background_3_playing:
+                        self.background_3_player = self.background_3.play(volume=0.5, loop=True)
+                        self.background_3_playing = True
+                    
+                    if self.background_2_playing:
+                        self.background_2_player.pause()
+                        self.background_2_playing = False
+                    
+                elif self.scene["cave_collision"] in collision.sprite_lists:
+                    if not self.background_4_playing:
+                        self.background_4_player = self.background_4.play(volume=0.5, loop=True)
+                        self.background_4_playing = True
+                    
+                    if self.background_2_playing:
+                        self.background_2_player.pause()
+                        self.background_2_playing = False
 
                 elif self.scene["tric"] in collision.sprite_lists: 
                     self.dino_set.add("tric")
