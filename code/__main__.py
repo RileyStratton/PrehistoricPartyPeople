@@ -3,10 +3,17 @@ Platformer Game
 """
 import arcade
 import os
-
+import json
 import constants
 from player import Player
 
+DRAW_X = 512,
+DRAW_Y = 392,
+DRAW_SIZE = 20,
+DRAW_ANCHOR = "center"
+
+with open("./assets/dino_data.json") as infile:
+    DINO_DATA = json.load(infile)
 
 class MyGame(arcade.Window):
     """
@@ -48,10 +55,20 @@ class MyGame(arcade.Window):
         self.jump_sound = arcade.load_sound(":resources:sounds/jump1.wav")
 
         # Load background sound
+        # self.background_1 = arcade.Sound(constants.BACKGROUND_1)
+        # self.background_2 = arcade.Sound(constants.BACKGROUND_2)
+        # self.background_3 = arcade.Sound(constants.BACKGROUND_3)
+        # self.background_4 = arcade.Sound(constants.BACKGROUND_4)
+
         self.background_1 = arcade.load_sound(constants.BACKGROUND_1)
         self.background_2 = arcade.load_sound(constants.BACKGROUND_2)
         self.background_3 = arcade.load_sound(constants.BACKGROUND_3)
         self.background_4 = arcade.load_sound(constants.BACKGROUND_4)
+
+        self.background_1_playing = False
+        self.background_2_playing = False
+        self.background_3_playing = False
+        self.background_4_playing = False
 
         # Load dinosaur sounds
         self.dinosaur_growl = arcade.load_sound(constants.DINOSAUR_GROWL)
@@ -59,13 +76,24 @@ class MyGame(arcade.Window):
         # if sound played
         self.sound_played = False
 
-        self.background_player = None
+        self.count = 0
 
-        arcade.play_sound(self.background_1, volume=0.15)
+        self.background_1_player = None
+        self.background_2_player = None
+        self.background_3_player = None
+        self.background_4_player = None
 
         arcade.set_background_color(arcade.csscolor.CORNFLOWER_BLUE)
 
         self.on_level_map = False
+
+        self.dino_set = set()
+
+        self.display_instructions = False
+        self.display_dino = False
+        self.current_dino = ""
+
+        
 
     def setup(self, current_map):
         """Set up the game here. Call this function to restart the game."""
@@ -102,9 +130,8 @@ class MyGame(arcade.Window):
         
         # Set up the player, specifically placing it at these coordinates.
         self.player_sprite = Player()
-    
-        self.player_sprite.center_x = 128
-        self.player_sprite.center_y = 128
+
+        # add sprite to scene
         self.scene.add_sprite(constants.LAYER_NAME_PLAYER, self.player_sprite)
 
         # --- Other stuff
@@ -146,6 +173,44 @@ class MyGame(arcade.Window):
             font_size=18,
         )
 
+        if self.display_instructions:
+            arcade.draw_text(
+                text = "Continue forward to see how dinosaurs went extinct!",
+                start_x=512,
+                start_y=392,
+                font_size=20,
+                anchor_x="center",
+                color=arcade.color.BLACK
+            )
+
+        if self.display_dino:
+            draw_dino = DINO_DATA[self.current_dino]
+            arcade.draw_text(
+                text = "Continue forward to see how dinosaurs went extinct!",
+                start_x=512,
+                start_y=392,
+                font_size=20,
+                anchor_x="center",
+                color=arcade.color.BLACK
+            )
+
+
+
+        # ------------ TESTING ------------
+        # arcade.draw_text(
+        #     text=f"x-position: {self.player_sprite.center_x}",
+        #     start_x=120,
+        #     start_y=10,
+        #     font_size=18
+        # )
+
+        # arcade.draw_text(
+        #     text=f"y-position: {self.player_sprite.center_y}",
+        #     start_x=420,
+        #     start_y=10,
+        #     font_size=18
+        # )
+
     def on_key_press(self, key, modifiers):
         """Called whenever a key is pressed."""
 
@@ -180,6 +245,8 @@ class MyGame(arcade.Window):
     def on_update(self, delta_time):
         """Movement and game logic"""
 
+        self.score = len(self.dino_set)
+
         # Move the player with the physics engine
         self.physics_engine.update()
 
@@ -204,36 +271,129 @@ class MyGame(arcade.Window):
         # Position the camera
         if self.on_level_map:
             self.center_camera_to_player()
+            if self.score >= 40:
+                self.setup("./assets/end.json")
 
         # Sign Collision Detection
         if not self.on_level_map:
-            menu_collision_list = arcade.check_for_collision_with_lists(self.player_sprite, [self.scene["start"]])
-            for collision in menu_collision_list:
-                if self.scene["start"] in collision.sprite_lists: 
-                    self.setup("./assets/sand_map.json")
-        # elif self.on_level_map:
-        #     collision_list = arcade.check_for_collision_with_lists(self.player_sprite, [
-        #         self.scene["cave"],
-        #         self.scene["forest"],
-        #         self.scene["swamp"],
-        #         self.scene["desert"]])
-        #     for collision in collision_list:
-        #         if self.scene["cave"] in collision.sprite_lists:
-        #             arcade.play_sound(self.background_3)
-        #         elif self.scene["forest"] in collision.sprite_lists:
-        #             arcade.play_sound(self.background_1)
-        #         elif self.scene["desert"] in collision.sprite_lists:
-        #             arcade.play_sound(self.background_2)
-        #         elif self.scene["swamp"] in collision.sprite_lists:
-        #             arcade.play_sound(self.background_4)
-            
-            pass
-            # for collision in collision_list:
-            #     if self.scene["dino"] in collision.sprite_lists: 
-            #       self.display_sign = True
-            #       arcade.play_sound(self.dinosuar_growl)
-            #     else: self.display_sign = False
+            menu_collision_list = arcade.check_for_collision_with_lists(self.player_sprite, [
+                self.scene["Start"],
+                self.scene["Exit"],
+                self.scene["Instructions"]])
 
+            for collision in menu_collision_list:
+                if self.scene["Start"] in collision.sprite_lists: 
+                    self.setup("./assets/sand_map.json")
+
+                elif self.scene["Instructions"] in collision.sprite_lists:
+                    self.display_instructions = True
+
+                elif self.scene["End"] in collision.sprite_lists:
+                    quit()
+
+            if len(menu_collision_list) == 0: self.display_instructions = False
+
+
+        elif self.on_level_map:
+            collision_list = arcade.check_for_collision_with_lists(self.player_sprite, [
+                self.scene["forest_collision"],
+                self.scene["swamp_collision"],
+                self.scene["desert_collision"],
+                self.scene["cave_collision"],
+                self.scene["tric"]])
+            for collision in collision_list:
+                if self.scene["forest_collision"] in collision.sprite_lists:
+                    self.background_1_player = self.background_1.play(volume=0.5, loop=True)
+                    self.background_1_playing = True
+                    collision.remove_from_sprite_lists()
+                elif self.scene["desert_collision"] in collision.sprite_lists:
+                    self.background_1_player.pause()
+                    self.background_1_playing = False
+                    self.background_2_player = self.background_2.play(volume=0.5, loop=True)
+                    self.background_2_playing = True
+                    collision.remove_from_sprite_lists()
+                elif self.scene["swamp_collision"] in collision.sprite_lists:
+                    print("in swamp")
+                    self.background_2_player.pause()
+                    self.background_2_playing = False
+                    self.background_3_player = self.background_3.play(volume=0.5, loop=True)
+                    self.background_3_playing = True
+                    collision.remove_from_sprite_lists()
+                elif self.scene["cave_collision"] in collision.sprite_lists:
+                    if self.background_2_playing:
+                        self.background_2_player.pause()
+                    elif self.background_3_playing:
+                        self.background_3_player.pause()
+                    self.background_4_player = self.background_4.play(volume=0.5, loop=True)
+                    self.background_4_playing = True
+                    collision.remove_from_sprite_lists()
+
+                if self.scene["tric"] in collision.sprite_lists: 
+                    self.dino_set.add("tric")
+                    self.current_dino = "tric"
+                    self.display_dino = True
+                    if not self.sound_played:
+                        arcade.play_sound(self.dinosaur_growl)
+                        self.sound_played = True
+                    #     self.count = 0
+                    # elif self.sound_played:
+                    #     self.count += 1
+
+                    # if self.count == 200:
+                    #     self.sound_played = False
+
+                # elif self.scene["para"] in collision.sprite_lists: 
+                #     self.dino_set.add("para")
+                #     self.current_dino = "para"
+                #     self.display_dino = True
+                #     arcade.play_sound(self.dinosaur_growl)
+
+                # elif self.scene["velo"] in collision.sprite_lists: 
+                #     self.dino_set.add("velo")
+                #     self.current_dino = "velo"
+                #     self.display_dino = True
+                #     arcade.play_sound(self.dinosaur_growl)
+
+                # elif self.scene["steg"] in collision.sprite_lists: 
+                #     self.dino_set.add("steg")
+                #     self.current_dino = "steg"
+                #     self.display_dino = True
+                #     arcade.play_sound(self.dinosaur_growl)
+
+                # elif self.scene["pter"] in collision.sprite_lists: 
+                #     self.dino_set.add("pter")
+                #     self.current_dino = "pter"
+                #     self.display_dino = True
+                #     arcade.play_sound(self.dinosaur_growl)
+
+                # elif self.scene["trex"] in collision.sprite_lists: 
+                #     self.dino_set.add("trex")
+                #     self.current_dino = "trex"
+                #     self.display_dino = True
+                #     arcade.play_sound(self.dinosaur_growl)
+
+                # elif self.scene["brac"] in collision.sprite_lists: 
+                #     self.dino_set.add("brac")
+                #     self.current_dino = "brac"
+                #     self.display_dino = True
+                #     arcade.play_sound(self.dinosaur_growl)
+
+                # elif self.scene["spin"] in collision.sprite_lists: 
+                #     self.dino_set.add("spin")
+                #     self.current_dino = "spin"
+                #     self.display_dino = True
+                #     arcade.play_sound(self.dinosaur_growl)
+
+                # elif self.scene["giga"] in collision.sprite_lists: 
+                #     self.dino_set.add("giga")
+                #     self.current_dino = "giga"
+                #     self.display_dino = True
+                #     arcade.play_sound(self.dinosaur_growl)
+
+            if len(collision_list) == 0: 
+                self.display_dino = False
+                self.sound_played = False
+                self.current_dino = ""        
 
 def main():
     """Main function"""
