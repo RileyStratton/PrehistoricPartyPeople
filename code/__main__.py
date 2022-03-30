@@ -61,6 +61,8 @@ class MyGame(arcade.Window):
         # Our TileMap Object
         self.tile_map = None
 
+        self.active_map = None
+
         # Our Scene Object
         self.scene = None
 
@@ -122,6 +124,8 @@ class MyGame(arcade.Window):
     def setup(self, current_map):
         """Set up the game here. Call this function to restart the game."""
 
+        self.active_map = current_map
+
         # If we're on the start or end screen, we don't want the camera
         if current_map == "./assets/title.json":
             self.on_level_map = False
@@ -133,9 +137,6 @@ class MyGame(arcade.Window):
             self.camera = arcade.Camera(self.width, self.height)
             self.gui_camera = arcade.Camera(self.width, self.height)
 
-        # Name of map file to load
-        map_name = current_map
-
         # Layer specific options are defined based on Layer names in a dictionary
         # Doing this will make the SpriteList for the platforms layer
         # use spatial hashing for detection.
@@ -146,7 +147,7 @@ class MyGame(arcade.Window):
         }
 
         # Read in the tiled map
-        self.tile_map = arcade.load_tilemap(map_name, constants.TILE_SCALING, layer_options)
+        self.tile_map = arcade.load_tilemap(self.active_map, constants.TILE_SCALING, layer_options)
 
         # Initialize Scene with our TileMap, this will automatically add all layers
         # from the map as SpriteLists in the scene in the proper order.
@@ -318,6 +319,7 @@ class MyGame(arcade.Window):
 
         # Move the player with the physics engine
         self.physics_engine.update()
+        
 
 
         self.scene.update_animation(
@@ -328,7 +330,7 @@ class MyGame(arcade.Window):
         # Position the camera
         if self.on_level_map:
             self.center_camera_to_player()
-            if self.score >= 8:
+            if (self.score >= 8) and (self.active_map != "./assets/end.json"):
                 self.setup("./assets/end.json")
 
         # Sign Collision Detection
