@@ -359,10 +359,6 @@ class MyGame(arcade.Window):
                 self.scene["swamp_collision"],
                 self.scene["desert_collision"],
                 self.scene["cave_collision"],
-                # self.scene["cave"],
-                # self.scene["forest"],
-                # # self.scene["swamp"],
-                # self.scene["desert"],
                 self.scene["tric"],
                 self.scene["para"],
                 # self.scene["velo"],
@@ -377,7 +373,6 @@ class MyGame(arcade.Window):
             for collision in collision_list:
                 if self.scene["forest_collision"] in collision.sprite_lists:
                     if not self.background_1_playing:
-                        print("playing background 1")
                         self.background_1_player = self.background_1.play(volume=0.5, loop=True)
                         self.background_1_playing = True
 
@@ -393,7 +388,6 @@ class MyGame(arcade.Window):
                     
                 elif self.scene["desert_collision"] in collision.sprite_lists:
                     if not self.background_2_playing:
-                        print("playing background 2")
                         self.background_2_player = self.background_2.play(volume=0.5, loop=True)
                         self.background_2_playing = True
 
