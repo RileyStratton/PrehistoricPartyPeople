@@ -263,7 +263,7 @@ class MyGame(arcade.Window):
             )
 
             arcade.draw_text(
-                text = f"I live near {location}",
+                text = f"I lived near {location}",
                 start_x=500,
                 start_y=550,
                 font_size=20,
