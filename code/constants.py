@@ -9,7 +9,7 @@ SCREEN_WIDTH = 1000
 SCREEN_HEIGHT = 650
 
 # window title
-SCREEN_TITLE = "Platformer"
+SCREEN_TITLE = "Prehistoric Party"
 
 
 # ------------ CHARACTER ------------
